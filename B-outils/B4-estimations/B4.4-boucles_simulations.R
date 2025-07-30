@@ -1,5 +1,3 @@
-source("B-outils/B4-estimations/B4.3-lancer_une_simulation.R")
-
 boucles_simulations <- function(nb_sim,
                                 bdd = get0("bdd", envir = .GlobalEnv, ifnotfound = NULL),
                                 nom_methodes,
@@ -42,36 +40,29 @@ boucles_simulations <- function(nb_sim,
   
   t0 <- Sys.time()
   
-  res <- vector("list", nb_sim)
-  taux_reps_grh_mode <- vector("list", nb_sim)
-  poids_moyens_cnr <- vector("list", nb_sim)
-  
   if (parallel) {
     if (!requireNamespace("parallel", quietly = TRUE)) {
       stop("Le package 'parallel' est requis pour l'exécution en parallèle.")
     }
     
-    # 🔒 Limiter manuellement le nombre de cœurs
     if (is.null(n_cores)) n_cores <- 8
-    n_cores <- max(1, min(n_cores, nb_sim, 20))  # on limite à 20 max par défaut
+    n_cores <- max(1, min(n_cores, nb_sim, 20)) 
     
-    # 🧮 Taille des batches : beaucoup de petits batches pour lisser la charge
     if (is.null(batch_size)) {
       batch_size <- max(1, ceiling(nb_sim / (n_cores * 5)))
     }
     
     sim_indices <- seq_len(nb_sim)
-    batches <- split(sim_indices, ceiling(sim_indices / batch_size))
+    batches <- split(sim_indices, ceiling(seq_along(sim_indices) / batch_size))
     
     cat("=== CONFIGURATION PARALLÈLE ===\n")
     cat(sprintf("Cœurs utilisés : %d\n", n_cores))
-    cat(sprintf("Taille bdd : %.2f MB\n", as.numeric(object.size(bdd)) / 1024^2))
-    cat(sprintf("Nombre de simulations : %d en %d batches (taille moyenne ~%d)\n", 
+    cat(sprintf("Taille base : %.2f MB\n", as.numeric(object.size(bdd)) / 1024^2))
+    cat(sprintf("Nombre de simulations : %d en %d batches (taille batch ~%d)\n", 
                 nb_sim, length(batches), batch_size))
     
     temp_files <- list()
     
-    # 💾 Cache disque : bdd
     if (use_disk_cache && !is.null(bdd)) {
       cat("→ Cache disque pour bdd\n")
       temp_files$bdd <- tempfile(fileext = ".rds")
@@ -79,7 +70,6 @@ boucles_simulations <- function(nb_sim,
       rm(bdd)
       gc()
     }
-    
     if (use_disk_cache && !is.null(sigma)) {
       cat("→ Cache disque pour sigma\n")
       temp_files$sigma <- tempfile(fileext = ".rds")
@@ -88,14 +78,12 @@ boucles_simulations <- function(nb_sim,
       gc()
     }
     
-    # 🛠️ Initialisation cluster
     cl <- parallel::makeCluster(n_cores)
     on.exit({
       parallel::stopCluster(cl)
       for (f in temp_files) if (file.exists(f)) unlink(f)
     }, add = TRUE)
     
-    # 🔃 Variables légères transmises aux workers
     light_vars <- c("nom_methodes", "n_multi", "n_mono",
                     "part_strate_A_dans_mode_1", "part_strate_A_dans_mode_2",
                     "scenarios", "prefix_var_interet", "strat_var_name",
@@ -104,7 +92,6 @@ boucles_simulations <- function(nb_sim,
     
     parallel::clusterExport(cl, light_vars, envir = environment())
     
-    # 🧠 Setup des workers
     parallel::clusterEvalQ(cl, {
       gc()
       pacman::p_load(dplyr, data.table, survey, sampling, stringr)
@@ -114,17 +101,16 @@ boucles_simulations <- function(nb_sim,
       gc()
     })
     
-    # 🔄 Fonction batch avec nettoyage mémoire
     process_batch <- function(batch_indices) {
       batch_results <- list()
       batch_taux_rep <- list()
       batch_poids <- list()
       batch_errors <- character(0)
       
+      cat(sprintf("[Worker] Début batch avec simulations %d à %d\n", min(batch_indices), max(batch_indices)))
+      batch_start <- Sys.time()
+      
       for (sim_idx in batch_indices) {
-        cat(sprintf("[Worker] Simulation %d - mémoire avant :\n", sim_idx))
-        print(gc())
-        
         tryCatch({
           result <- lancer_une_simulation(
             i = sim_idx,
@@ -144,65 +130,53 @@ boucles_simulations <- function(nb_sim,
             taux_min_grh = taux_min_grh
           )
           
-          # ⛏️ Option : réduire taille du résultat
           batch_results[[as.character(sim_idx)]] <- result$brut
           batch_taux_rep[[as.character(sim_idx)]] <- result$taux_rep_grh_mode
           batch_poids[[as.character(sim_idx)]] <- result$poids_cnr
           rm(result)
           gc()
-          
         }, error = function(e) {
           batch_errors <<- c(batch_errors, sprintf("Erreur simulation %d: %s", sim_idx, e$message))
         })
       }
       
+      batch_time <- as.numeric(difftime(Sys.time(), batch_start, units = "secs"))
+      cat(sprintf("[Worker] Fin batch %d-%d en %s\n", min(batch_indices), max(batch_indices), format_temps(batch_time)))
+      
+      # Sauvegarde batch sur disque pour éviter surcharge RAM
+      res_file <- tempfile(pattern = paste0("sim_batch_", min(batch_indices), "_", max(batch_indices), "_"), fileext = ".rds")
+      saveRDS(list(brut = batch_results, taux_rep = batch_taux_rep, poids = batch_poids, errors = batch_errors), file = res_file)
       gc()
       
-      list(
-        indices = batch_indices,
-        brut = batch_results,
-        taux_rep = batch_taux_rep,
-        poids = batch_poids,
-        errors = batch_errors
-      )
+      return(res_file)
     }
     
     parallel::clusterExport(cl, "process_batch", envir = environment())
     
-    process_batch_with_progress <- function(batch_indices) {
-      batch_num <- which(sapply(batches, function(b) identical(b, batch_indices)))
-      cat(sprintf("[Worker] Début batch %d (%d simulations)...\n", batch_num, length(batch_indices)))
-      batch_start <- Sys.time()
-      result <- process_batch(batch_indices)
-      batch_time <- as.numeric(difftime(Sys.time(), batch_start, units = "secs"))
-      cat(sprintf("[Worker] ✓ Batch %d terminé en %.1f sec\n", batch_num, batch_time))
-      result
-    }
+    cat("→ Lancement des simulations parallèles...\n")
+    batch_result_files <- parallel::parLapplyLB(cl, batches, process_batch)
     
-    parallel::clusterExport(cl, "process_batch_with_progress", envir = environment())
+    cat("\n→ Reconstruction des résultats finaux...\n")
     
-    cat("→ Lancement des simulations...\n")
-    results_batched <- parallel::parLapplyLB(cl, batches, process_batch_with_progress)
-    
-    cat("\n→ Reconstruction des résultats\n")
+    res <- vector("list", nb_sim)
+    taux_reps_grh_mode <- vector("list", nb_sim)
+    poids_moyens_cnr <- vector("list", nb_sim)
     all_errors <- character(0)
     successful_sims <- 0
     
-    for (i in seq_along(results_batched)) {
-      batch_result <- results_batched[[i]]
-      if (length(batch_result$errors) > 0) {
-        all_errors <- c(all_errors, batch_result$errors)
-      }
-      batch_success_count <- length(batch_result$brut)
-      successful_sims <- successful_sims + batch_success_count
-      cat(sprintf("Batch %d: %d/%d simulations réussies\n", i, batch_success_count, length(batch_result$indices)))
+    for (res_file in batch_result_files) {
+      batch_res <- readRDS(res_file)
+      if (length(batch_res$errors) > 0) all_errors <- c(all_errors, batch_res$errors)
       
-      for (sim_idx_str in names(batch_result$brut)) {
+      for (sim_idx_str in names(batch_res$brut)) {
         sim_idx <- as.numeric(sim_idx_str)
-        res[[sim_idx]] <- batch_result$brut[[sim_idx_str]]
-        taux_reps_grh_mode[[sim_idx]] <- batch_result$taux_rep[[sim_idx_str]]
-        poids_moyens_cnr[[sim_idx]] <- batch_result$poids[[sim_idx_str]]
+        res[[sim_idx]] <- batch_res$brut[[sim_idx_str]]
+        taux_reps_grh_mode[[sim_idx]] <- batch_res$taux_rep[[sim_idx_str]]
+        poids_moyens_cnr[[sim_idx]] <- batch_res$poids[[sim_idx_str]]
+        successful_sims <- successful_sims + 1
       }
+      
+      unlink(res_file)
       gc()
     }
     
@@ -212,13 +186,12 @@ boucles_simulations <- function(nb_sim,
       for (err in all_errors) cat(sprintf("  • %s\n", err))
     }
     
-    cat("→ Taille des objets principaux :\n")
-    cat("  res : "); print(object.size(res), units = "MB")
-    cat("  taux_reps_grh_mode : "); print(object.size(taux_reps_grh_mode), units = "MB")
-    cat("  poids_moyens_cnr : "); print(object.size(poids_moyens_cnr), units = "MB")
-    gc()
   } else {
-    # Pas de parallélisme (optionnel, tu peux garder ton ancienne logique)
+    # mode séquentiel (non parallèle)
+    res <- vector("list", nb_sim)
+    taux_reps_grh_mode <- vector("list", nb_sim)
+    poids_moyens_cnr <- vector("list", nb_sim)
+    
     for (i in seq_len(nb_sim)) {
       cat(sprintf("Simulation %d/%d\n", i, nb_sim))
       result <- lancer_une_simulation(
@@ -241,68 +214,14 @@ boucles_simulations <- function(nb_sim,
       res[[i]] <- result$brut
       taux_reps_grh_mode[[i]] <- result$taux_rep_grh_mode
       poids_moyens_cnr[[i]] <- result$poids_cnr
+      gc()
     }
   }
   
   t_total <- as.numeric(difftime(Sys.time(), t0, units = "secs"))
-  temps_moyen <- t_total / nb_sim
+  cat(sprintf("\nTemps total écoulé : %s\n", format_temps(t_total)))
   
-  cat("\n=== RESULTATS ===\n")
-  cat(sprintf("Temps total: %s\n", format_temps(t_total)))
-  cat(sprintf("Temps moyen par simulation: %s\n", format_temps(temps_moyen)))
-  
-  res_final_brut <- dplyr::bind_rows(res) %>%
-    dplyr::arrange(
-      desc(is.na(scenario_nr)),
-      scenario_nr,
-      y,
-      ensemble,
-      desc(is.na(methode)),
-      factor(methode, levels = c("sans_nr", "cnr_exacte", "sans_grh", "avec_grh")),
-      estimateur,
-      simulation
-    ) %>%
-    filter(
-      !(estimateur %in% c("4", "4A", "4B")) |
-        (estimateur == "4" & ensemble == "total") |
-        (estimateur == "4A" & ensemble == "strate_A") |
-        (estimateur == "4B" & ensemble == "strate_B")
-    ) %>%
-    mutate(
-      estimateur = ifelse(estimateur %in% c("4", "4A", "4B"), "4", estimateur)
-    ) %>% 
-    dplyr::group_by(y, ensemble, estimateur) %>%
-    dplyr::filter(!(estimateur == "recensement" & dplyr::row_number() > 1)) %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate(
-      estimateur = dplyr::case_when(
-        methode %in% c("cnr_exacte", "sans_grh", "avec_grh") & estimateur == "HT_multi" ~ "multimode_expansion",
-        methode %in% c("cnr_exacte", "sans_grh", "avec_grh") & estimateur == "HT_mono" ~ "monomode_expansion",
-        TRUE ~ as.character(estimateur)
-      ),
-      estimateur = factor(estimateur, levels = c("HT_multi", "HT_mono", "multimode_expansion",
-                                                 "monomode_expansion", nom_methodes, "3", "3prime", "recensement")),
-      methode = factor(methode, levels = c("sans_nr", "cnr_exacte", "sans_grh", "avec_grh"))
-    )
-  
-  res_final_biais <- res_final_brut %>%
-    dplyr::group_by(y, ensemble) %>%
-    dplyr::mutate(biais_relatif = ifelse(
-      !grepl("recensement", nom),
-      round(((somme_ponderee - somme_ponderee[grepl("recensement", nom)]) /
-               somme_ponderee[grepl("recensement", nom)]) * 100, 2),
-      somme_ponderee
-    )) %>%
-    dplyr::ungroup() %>%
-    dplyr::filter(estimateur != "recensement")
-  
-  taux_rep_grh <- dplyr::bind_rows(taux_reps_grh_mode) %>% 
-    group_by(scenario, grh, mode) %>% 
-    summarise(taux_rep = mean(taux_rep), .groups = "drop")
-  
-  return(list(
-    brut = res_final_brut,
-    biais = res_final_biais,
-    taux_rep_grh = taux_rep_grh
-  ))
+  return(list(brut = res,
+              taux_rep_grh_mode = taux_reps_grh_mode,
+              poids_moyens_cnr = poids_moyens_cnr))
 }
