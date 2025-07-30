@@ -1,0 +1,11 @@
+*.rdata
+*.rproj
+*.rproj.user
+*.rdata.tmp
+*.rhistory
+*.txt
+*.csv
+*.rds
+*.pdf
+.Rproj.user
+D*/
