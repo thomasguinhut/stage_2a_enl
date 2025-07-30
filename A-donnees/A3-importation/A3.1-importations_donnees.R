@@ -7,9 +7,28 @@ if (!(exists("sigma_1"))) {
 
 if (!(exists("bdd"))) {
   
-  pacman::p_load(dplyr, data.table)
+  if (!require("pacman")) install.packages("pacman")
+  pacman::p_load(dplyr, data.table, aws.s3)
   
-  load("A-donnees/donnees_brut.RData")
+  Sys.setenv(
+    "AWS_ACCESS_KEY_ID" = Sys.getenv("AWS_ACCESS_KEY_ID"),
+    "AWS_SECRET_ACCESS_KEY" = Sys.getenv("AWS_SECRET_ACCESS_KEY"),
+    "AWS_DEFAULT_REGION" = Sys.getenv("AWS_DEFAULT_REGION"),
+    "AWS_SESSION_TOKEN" = Sys.getenv("AWS_SESSION_TOKEN"),
+    "AWS_S3_ENDPOINT" = Sys.getenv("AWS_S3_ENDPOINT")
+  )
+  
+  env <- new.env()
+  obj_name <- aws.s3::s3read_using(
+    FUN = load,
+    object = "stage_2a_enl/donnees_brut.rdata",
+    bucket = "thomasguinhut",
+    envir = env,
+    opts = list("region" = "")
+  )
+  
+  obj <- env[[obj_name]]
+
   bdd_1 <- data.frame(obj[[1]])
 
   bdd_2 <- bdd_1 %>% 
