@@ -2,7 +2,7 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(
   dplyr, data.table, survey, torch, pbivnorm, sampling, doParallel, foreach, base,
   parallel, stringr, forcats, ggplot2, ggthemes, tidyverse, ggh4x, ggtext, gridExtra, 
-  tidyr, purrr, grid, patchwork, pbapply, future.apply
+  tidyr, purrr, grid, patchwork, pbapply, future.apply, future, doFuture, progressr
 )
 
 exceptions <- c(

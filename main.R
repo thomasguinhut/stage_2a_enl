@@ -1,4 +1,5 @@
-devtools::install_github("max-alletsee/rstudio-themes")
+setwd("~/work/stage_2a_enl")
+chargement_theme_rstudio("Pebble-dark")
 
 ################################# Étape A ######################################
 ############### PRÉPARATION DES DONNÉES ET DE L'ENVIRONNEMENT ##################
@@ -37,7 +38,7 @@ source("B-outils/B6-tableaux_figures/B6.4-comparaisons_coef_hartley.R")
 
 # ------------------------ À PARAMÉTRER ----------------------------------------
 
-nb_sim <- 100
+nb_sim <- 16
 n_multi <- 30800
 part_idf_multimode <- 0.148
 n_mono <- 50000
