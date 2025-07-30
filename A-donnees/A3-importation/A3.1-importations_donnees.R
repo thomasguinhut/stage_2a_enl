@@ -10,14 +10,6 @@ if (!(exists("bdd"))) {
   if (!require("pacman")) install.packages("pacman")
   pacman::p_load(dplyr, data.table, aws.s3)
   
-  Sys.setenv(
-    "AWS_ACCESS_KEY_ID" = Sys.getenv("AWS_ACCESS_KEY_ID"),
-    "AWS_SECRET_ACCESS_KEY" = Sys.getenv("AWS_SECRET_ACCESS_KEY"),
-    "AWS_DEFAULT_REGION" = Sys.getenv("AWS_DEFAULT_REGION"),
-    "AWS_SESSION_TOKEN" = Sys.getenv("AWS_SESSION_TOKEN"),
-    "AWS_S3_ENDPOINT" = Sys.getenv("AWS_S3_ENDPOINT")
-  )
-  
   env <- new.env()
   obj_name <- aws.s3::s3read_using(
     FUN = load,
@@ -53,9 +45,7 @@ if (!(exists("bdd"))) {
 
   bdd <- bdd_5
   
-  rm(bdd_1, bdd_2, bdd_3, bdd_4, bdd_5)
-  
-  saveRDS(bdd, "A-donnees/donnees_propres.Rds")
+  rm(bdd_1, bdd_2, bdd_3, bdd_4, bdd_5, obj_name, obj, env)
   
 }
 

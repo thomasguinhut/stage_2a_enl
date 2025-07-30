@@ -7,5 +7,5 @@
 *.csv
 *.rds
 *.pdf
-*.Rproj.user
 D*/
+.Rproj.user

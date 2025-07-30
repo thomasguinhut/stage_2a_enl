@@ -1,4 +1,4 @@
-tableau_resultats <- function(brut, nom_dossier, num_dossier, sc, chemin_sous_dossier){
+tableau_resultats <- function(brut, nom_dossier, num_dossier, sc, chemin_sous_dossier, aws){
   
   brut <- brut %>%
     filter(is.na(scenario_nr) | scenario_nr == sc)
@@ -24,5 +24,19 @@ tableau_resultats <- function(brut, nom_dossier, num_dossier, sc, chemin_sous_do
            cv = round(sqrt(variance) / esperance * 100, 10),
            cv_reqm = round(reqm / esperance * 100, 10))
 
-  write.csv(tableau, paste0(chemin_sous_dossier, "/1-tableau_resultats_", nom_dossier, "_scenario_", sc, ".csv"))
+  if (aws == FALSE) {
+    
+    write.csv(tableau, paste0(chemin_sous_dossier, "/1-tableau_resultats_", nom_dossier, "_scenario_", sc, ".csv"))
+  
+  } else {
+    
+    aws.s3::s3write_using(
+      tableau,
+      FUN = readr::write_csv,
+      object = paste0(chemin_sous_dossier, "/1-tableau_resultats_", nom_dossier, "_scenario_", sc, ".csv"),
+      bucket = "thomasguinhut",
+      opts = list("region" = "")
+    )
+    
+  }
 }
