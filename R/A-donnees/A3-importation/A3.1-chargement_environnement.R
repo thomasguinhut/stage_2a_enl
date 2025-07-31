@@ -74,18 +74,15 @@ install_if_missing <- function(pkg) {
   # Charger le package avec suppression des warnings pour aws.s3
   if (pkg == "aws.s3") {
     suppressWarnings({
+      if (!nzchar(Sys.getenv("AWS_ACCESS_KEY_ID"))) {
+        Sys.setenv("AWS_ACCESS_KEY_ID" = "dummy", "AWS_SECRET_ACCESS_KEY" = "dummy")
+      }
       if (!suppressMessages(require(pkg, character.only = TRUE, quietly = TRUE))) {
         message("⚠️ Impossible de charger le package : ", pkg)
       } else {
-        message("✓ Package chargé : ", pkg, " (warnings AWS supprimés)")
+        message("✓ Package chargé : ", pkg, " (credentials AWS fictifs utilisés)")
       }
     })
-  } else {
-    if (!suppressMessages(require(pkg, character.only = TRUE, quietly = TRUE))) {
-      message("⚠️ Impossible de charger le package : ", pkg)
-    } else {
-      message("✓ Package chargé : ", pkg)
-    }
   }
 }
 
