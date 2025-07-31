@@ -97,7 +97,6 @@ boucles_simulations <- function(nb_sim,
     parallel::clusterExport(cl, light_vars, envir = environment())
 
     parallel::clusterEvalQ(cl, {
-      pacman::p_load(dplyr, data.table, survey, sampling, stringr)
       if (!is.null(source_files)) {
         lapply(source_files, source)
       }

@@ -1,4 +1,4 @@
-graphique_principal <- function(df, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier, type_graphique, aws,
+graphique_principal <- function(df, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D, type_graphique,
                                 xmin_boxplots = NULL, xmax_boxplots = NULL, xmax_biais = NULL, xmax_eqm = NULL) {
   
   # Sélection des données selon le type de graphique
@@ -6,7 +6,7 @@ graphique_principal <- function(df, nb_sim, nom_methodes, nom_dossier, num_dossi
     data_to_use <- df %>% 
       filter(is.na(scenario_nr) | scenario_nr == sc)
   } else if (type_graphique %in% c("biais", "eqm")) {
-    data_to_use <- read.csv(paste0(chemin_sous_dossier, "/1-tableau_resultats_", nom_dossier, "_scenario_", sc, ".csv"))
+    data_to_use <- read.csv(paste0(chemin_sous_dossier_D, "/1-tableau_resultats_", nom_dossier, "_scenario_", sc, ".csv"))
   } else {
     stop("type_graphique doit être 'boxplots', 'biais' ou 'eqm'")
   }
@@ -259,90 +259,61 @@ graphique_principal <- function(df, nb_sim, nom_methodes, nom_dossier, num_dossi
   }
   
   # Début des graphiques
-  pdf.options(encoding = "UTF-8")
   
   if (type_graphique == "boxplots") {
     
     # Complet
     p_all <- create_plot(data_clean)
-    export_pdf(
-      plot = p_all,
-      filename = paste0("2-boxplots-complet_", nom_dossier, "_scenario_", sc, ".pdf"),
-      width = 11,
-      height = 15.5,
-      aws = aws,
-      chemin_sous_dossier = chemin_sous_dossier
-    )
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/2-boxplots-complet_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/2-boxplots-complet_", nom_dossier, "_scenario_", sc, ".pdf")
+    ggsave(nom_fichier_D, plot = p_all, width = 11, height = 15.5, device = cairo_pdf)
+    system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
     
     # Page 1
     p_page1 <- create_plot(filter(data_clean, methode_label %in% methode_labels[c("sans_nr", "cnr_exacte")]))
-    export_pdf(
-      plot = p_page1,
-      filename = paste0("2-boxplots-page1_", nom_dossier, "_scenario_", sc, ".pdf"),
-      width = 11,
-      height = 8,
-      aws = aws,
-      chemin_sous_dossier = chemin_sous_dossier
-    )
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/2-boxplots-page1_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/2-boxplots-page1_", nom_dossier, "_scenario_", sc, ".pdf")
+    ggsave(nom_fichier_D, plot = p_page1, width = 11, height = 8, device = cairo_pdf)
+    system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
     
     # Page 2
     p_page2 <- create_plot(filter(data_clean, methode_label %in% methode_labels[c("sans_grh", "avec_grh")]))
-    export_pdf(
-      plot = p_page2,
-      filename = paste0("2-boxplots-page2_", nom_dossier, "_scenario_", sc, ".pdf"),
-      width = 11,
-      height = 8,
-      aws = aws,
-      chemin_sous_dossier = chemin_sous_dossier
-    )
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/2-boxplots-page2_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/2-boxplots-page2_", nom_dossier, "_scenario_", sc, ".pdf")
+    ggsave(nom_fichier_D, plot = p_page2, width = 11, height = 8, device = cairo_pdf)
+    system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
     
   } else if (type_graphique == "biais") {
     
     # Complet
     p_all <- create_plot(data_clean)
-    export_pdf(
-      plot = p_all,
-      filename = paste0("3-biais-complet_", nom_dossier, "_scenario_", sc, ".pdf"),
-      width = 11,
-      height = 15.5,
-      aws = aws,
-      chemin_sous_dossier = chemin_sous_dossier
-    )
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/3-biais-complet_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/3-biais-complet_", nom_dossier, "_scenario_", sc, ".pdf")
+    ggsave(nom_fichier_D, plot = p_all, width = 11, height = 15.5, device = cairo_pdf)
+    system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
     
     # Page 1
     p_page1 <- create_plot(filter(data_clean, methode_label %in% methode_labels[c("sans_nr", "cnr_exacte")]))
-    export_pdf(
-      plot = p_page1,
-      filename = paste0("3-biais-page1_", nom_dossier, "_scenario_", sc, ".pdf"),
-      width = 13,
-      height = 8,
-      aws = aws,
-      chemin_sous_dossier = chemin_sous_dossier
-    )
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/3-biais-page1_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/3-biais-page1_", nom_dossier, "_scenario_", sc, ".pdf")
+    ggsave(nom_fichier_D, plot = p_page1, width = 13, height = 8, device = cairo_pdf)
+    system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
     
     # Page 2
     p_page2 <- create_plot(filter(data_clean, methode_label %in% methode_labels[c("sans_grh", "avec_grh")]))
-    export_pdf(
-      plot = p_page2,
-      filename = paste0("3-biais-page2_", nom_dossier, "_scenario_", sc, ".pdf"),
-      width = 13,
-      height = 8,
-      aws = aws,
-      chemin_sous_dossier = chemin_sous_dossier
-    )
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/3-biais-page2_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/3-biais-page2_", nom_dossier, "_scenario_", sc, ".pdf")
+    ggsave(nom_fichier_D, plot = p_page2, width = 13, height = 8, device = cairo_pdf)
+    system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
     
   } else if (type_graphique == "eqm") {
     
     # Page 2 uniquement
     p_page2 <- create_plot(filter(data_clean, methode_label %in% methode_labels[c("sans_grh", "avec_grh")]))
-    export_pdf(
-      plot = p_page2,
-      filename = paste0("4-eqm-page2_", nom_dossier, "_scenario_", sc, ".pdf"),
-      width = 13,
-      height = 8,
-      aws = aws,
-      chemin_sous_dossier = chemin_sous_dossier
-    )
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/4-eqm-page2_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/4-eqm-page2_", nom_dossier, "_scenario_", sc, ".pdf")
+    ggsave(nom_fichier_D, plot = p_page2, width = 13, height = 8, device = cairo_pdf)
+    system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
     
   } else {
     stop("type_graphique doit être 'boxplots', 'biais' ou 'eqm'")

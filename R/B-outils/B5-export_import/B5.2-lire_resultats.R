@@ -1,36 +1,25 @@
-lire_resultats <- function(num_dossier, nom_dossier, chemin_dossier, scenarios, nom_methodes, prefix_var_interet, nb_sim, aws) {
+lire_resultats <- function(num_dossier, nom_dossier, chemin_dossier, scenarios, nom_methodes, prefix_var_interet, nb_sim) {
+    
+  brut <- aws.s3::s3read_using(
+    FUN = function(file) read_csv(file, show_col_types = FALSE),
+    object = paste0(chemin_dossier, "/", num_dossier, ".1-brut_", nom_dossier, ".csv"),
+    bucket = "thomasguinhut",
+    opts = list("region" = "")
+  )
   
-  # Lecture
-  if (aws == FALSE) {
-    
-    brut <- readRDS(paste0(chemin_dossier, "/D", num_dossier, ".1-brut_", nom_dossier, ".rds"))
-    biais <- readRDS(paste0(chemin_dossier, "/D", num_dossier, ".2-biais_", nom_dossier, ".rds"))
-    taux_rep_grh <- readRDS(paste0(chemin_dossier, "/D", num_dossier, ".3-taux_rep_grh_", nom_dossier, ".rds"))
-    
-  } else {
-    
-    brut <- aws.s3::s3read_using(
-      FUN = function(file) read_csv(file, show_col_types = FALSE),
-      object = paste0(chemin_dossier, "/", num_dossier, ".1-brut_", nom_dossier, ".csv"),
-      bucket = "thomasguinhut",
-      opts = list("region" = "")
-    )
-    
-    biais <- aws.s3::s3read_using(
-      FUN = function(file) read_csv(file, show_col_types = FALSE),
-      object = paste0(chemin_dossier, "/", num_dossier, ".2-biais_", nom_dossier, ".csv"),
-      bucket = "thomasguinhut",
-      opts = list("region" = "")
-    )
-    
-    taux_rep_grh <- aws.s3::s3read_using(
-      FUN = function(file) read_csv(file, show_col_types = FALSE),
-      object = paste0(chemin_dossier, "/", num_dossier, ".3-taux_rep_grh_", nom_dossier, ".csv"),
-      bucket = "thomasguinhut",
-      opts = list("region" = "")
-    )
-    
-  }
+  biais <- aws.s3::s3read_using(
+    FUN = function(file) read_csv(file, show_col_types = FALSE),
+    object = paste0(chemin_dossier, "/", num_dossier, ".2-biais_", nom_dossier, ".csv"),
+    bucket = "thomasguinhut",
+    opts = list("region" = "")
+  )
+  
+  taux_rep_grh <- aws.s3::s3read_using(
+    FUN = function(file) read_csv(file, show_col_types = FALSE),
+    object = paste0(chemin_dossier, "/", num_dossier, ".3-taux_rep_grh_", nom_dossier, ".csv"),
+    bucket = "thomasguinhut",
+    opts = list("region" = "")
+  )
   
   # Conversion en data.frame pour assignation et affichage
   brut_df <- as.data.frame(brut)

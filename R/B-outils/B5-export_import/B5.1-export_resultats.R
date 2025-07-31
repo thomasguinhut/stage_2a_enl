@@ -1,4 +1,4 @@
-export_resultats <- function(resultats, chiffre, chemin_dossier, nom_dossier, aws = TRUE) {
+export_resultats <- function(resultats, chiffre, chemin_dossier, nom_dossier) {
   
   if (aws == FALSE) {
     

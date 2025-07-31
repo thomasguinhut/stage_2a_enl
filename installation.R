@@ -17,7 +17,6 @@ source("R/B-outils/B4-estimations/B4.4-boucles_simulations.R")
 
 source("R/B-outils/B5-export_import/B5.1-export_resultats.R")
 source("R/B-outils/B5-export_import/B5.2-lire_resultats.R")
-source("R/B-outils/B5-export_import/B5.3-export_pdf.R")
 
 source("R/B-outils/B6-tableaux_figures/B6.1-tableau_resultats.R")
 source("R/B-outils/B6-tableaux_figures/B6.2-graphique_principal.R")

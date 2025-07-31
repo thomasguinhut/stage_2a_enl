@@ -17,7 +17,6 @@ prefix_var_interet <- c("y_1_", "y_2_", "y_3_")
 nom_methodes <- c("1a", "1aprime", "1b", "2a", "2aprime", "3a", "3aprime", "3b", "3bprime", "4")
 formule_cnr <- "x_1 + x_2 + x_3 + x_4 + x_5"
 strat_var_name <- "strate_vec"
-aws <- TRUE
 
 
 
@@ -59,16 +58,13 @@ nom_dossier <- "test"
 num_dossier <- "0"
 
 # Créer le dossier s’il n’existe pas
-chemin_dossier <- ifelse(aws == FALSE,
-  paste0("R/D-exports/D", num_dossier, "-", nom_dossier),
-  paste0("stage_2a_enl/exports/", num_dossier, "-", nom_dossier)
-)
+chemin_dossier <- paste0("stage_2a_enl/exports/", num_dossier, "-", nom_dossier)
 
 # Sauvegarde
-export_resultats(resultats, num_dossier, chemin_dossier, nom_dossier, aws)
+export_resultats(resultats, num_dossier, chemin_dossier, nom_dossier)
 
 # Réimportation des résultats dans l'environnement de travail
-lire_resultats(num_dossier, nom_dossier, chemin_dossier, scenarios_nr, nom_methodes, prefix_var_interet, nb_sim, aws)
+lire_resultats(num_dossier, nom_dossier, chemin_dossier, scenarios_nr, nom_methodes, prefix_var_interet, nb_sim)
 
 # Appels dynamiques des fonctions de post-traitement pour chaque scénario
 for (sc in scenarios_nr) {
@@ -85,18 +81,21 @@ for (sc in scenarios_nr) {
 
   # Graphiques et tableau
   tableau_resultats(obj_brut, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D)
-  # graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier, "boxplots", aws = FALSE)
-  # graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier, "biais", aws = FALSE)
-  # graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier, "eqm", aws = FALSE)
-  # taux_rep_grh(obj_taux, nb_sim, nom_dossier, num_dossier, sc, chemin_sous_dossier, aws = FALSE)
+  # graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D, "boxplots")
+  graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D, "biais")
+  # graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D, "eqm")
+  # taux_rep_grh(obj_taux, nb_sim, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D)
   # comparaisons_coef_hartley(obj_biais, n_multi, n_mono)
 
   # Nettoyage
   rm(obj_biais, obj_brut, obj_taux)
 
   cat(paste0(
-    "\nTous les tableaux et figures du scénario ", sc, " ont bien été exportés dans le dossier correspondant.\n\n"
+    "Tous les tableaux et figures du scénario ", sc, " ont bien été exportés dans le dossier correspondant.\n"
   ))
+  
+  unlink("R/D-exports", recursive = TRUE, force = TRUE)
+  
 }
 
 

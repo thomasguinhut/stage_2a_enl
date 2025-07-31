@@ -23,7 +23,7 @@ check_libgit2 <- tryCatch(
   error = function(e) character(0)
 )
 
-excluded <- c("renv", "rsthemes") # packages exclus systématiquement
+excluded <- c()
 
 if (length(check_libgit2) == 0) {
   message("⚠️ libgit2 non détectée, exclusion de git2r")
@@ -56,10 +56,11 @@ suppressMessages(suppressPackageStartupMessages({
 }))
 
 # -------------------------------------------------------------------
-# 4. Détection des dépendances du projet ----------------------------
+# 4. Liste des packages à installer et charger -----------------------
 
-deps <- unique(renv::dependencies(path = ".", progress = FALSE)$Package)
-deps <- setdiff(deps, excluded)
+deps <- c("data.table", "rstudioapi", "aws.s3", "sampling", "stringr", "dplyr",
+          "parallel", "survey", "readr", "ggplot2", "ggthemes", "tidyverse",
+          "ggh4x", "ggtext", "gridExtra", "tidyr", "grid")
 
 # -------------------------------------------------------------------
 # 5. Installation des packages manquants -----------------------------

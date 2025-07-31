@@ -1,4 +1,4 @@
-taux_rep_grh <- function(df_taux_rep, nb_sim, nom_dossier, num_dossier, sc, chemin_sous_dossier, aws) {
+taux_rep_grh <- function(df_taux_rep, nb_sim, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D) {
   
   # Filtrer le scénario demandé
   df_taux_rep <- df_taux_rep %>% filter(scenario == !!sc)
@@ -34,13 +34,9 @@ taux_rep_grh <- function(df_taux_rep, nb_sim, nom_dossier, num_dossier, sc, chem
       fill = "Échantillon"
     )
   
-  export_pdf(
-    plot = plot,
-    filename = paste0(chemin_sous_dossier, "/5-taux_rep_grh_scenario_", sc, ".pdf"),
-    width = 8.27,
-    height = 5.83,
-    aws = aws,
-    chemin_sous_dossier = chemin_sous_dossier
-  )
+  nom_fichier_D <- paste0(chemin_sous_dossier_D, "/5-taux_rep_grh_scenario_", sc, ".pdf")
+  nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/5-taux_rep_grh_scenario_", sc, ".pdf")
+  ggsave(nom_fichier_D, plot = plot, width = 8.27, height = 5.83, device = cairo_pdf)
+  system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
   
 }
