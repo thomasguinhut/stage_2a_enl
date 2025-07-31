@@ -1,16 +1,14 @@
 setwd("~/work/stage_2a_enl")
-chargement_theme_rstudio()
 
 
 ################################# Étape A ######################################
 ############### PRÉPARATION DES DONNÉES ET DE L'ENVIRONNEMENT ##################
 
 
-# Importation des données simulées prêtes à l'emploi
 source("A-donnees/A3-importation/A3.1-importations_donnees.R")
-
-# Chargement des packages et nettoyage partiel de l’environnement
 source("A-donnees/A3-importation/A3.2-chargement_environnement.R")
+source("A-donnees/A3-importation/A3.3-chargement_theme_rstudio.R")
+chargement_theme_rstudio()
 
 
 

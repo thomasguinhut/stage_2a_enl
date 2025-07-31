@@ -9,13 +9,13 @@ chargement_theme_rstudio <- function(theme_name = "a11y-dark {rsthemes}") {
   
   # Installer rsthemes si absent
   if (!"rsthemes" %in% installed.packages()[, "Package"]) {
-    devtools::install_github("gadenbuie/rsthemes")
+    devtools::install_github("gadenbuie/rsthemes", upgrade = "never")
   }
   
   # Charger rsthemes
   pacman::p_load(rsthemes)
   
-  # Installer les thèmes si nécessaire
+  # Installer les thèmes (idempotent, sans danger)
   rsthemes::install_rsthemes()
   
   # Appliquer le thème si RStudio est actif
