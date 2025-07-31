@@ -86,10 +86,12 @@ try({
     if ("git2r" %in% excluded) {
       message("⚠️ Installation de rsthemes ignorée (dépendances système manquantes)")
     } else {
-      if (!requireNamespace("devtools", quietly = TRUE)) {
-        install.packages("devtools", quiet = TRUE, ask = FALSE)
+      if (!requireNamespace("remotes", quietly = TRUE)) {
+        install.packages("remotes", quiet = TRUE, ask = FALSE)
       }
-      devtools::install_github("gadenbuie/rsthemes", quiet = TRUE)
+      suppressWarnings(
+        remotes::install_github("gadenbuie/rsthemes", quiet = TRUE)
+      )
     }
   }
 }, silent = TRUE)

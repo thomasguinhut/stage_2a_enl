@@ -4,7 +4,7 @@ if (rstudioapi::isAvailable()) {
   tryCatch(
     {
       # On retire {rsthemes} car ce n'est pas un nom valide
-      rstudioapi::applyTheme("a11y-dark")
+      rstudioapi::applyTheme("a11y-dark {rsthemes}")
       message("Thème 'a11y-dark' appliqué avec succès.")
     },
     error = function(e) {
