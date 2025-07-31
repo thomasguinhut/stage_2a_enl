@@ -68,5 +68,3 @@ lire_resultats <- function(num_dossier, nom_dossier, chemin_dossier, scenarios, 
              nbr_lignes * nb_sim,
              " lignes.\n"))
 }
-
-unique(test_biais$)

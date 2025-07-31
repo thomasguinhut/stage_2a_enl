@@ -3,7 +3,6 @@
 *.rproj.user
 *.rdata.tmp
 *.Rhistory
-*.txt
 *.csv
 *.rds
 *.pdf
