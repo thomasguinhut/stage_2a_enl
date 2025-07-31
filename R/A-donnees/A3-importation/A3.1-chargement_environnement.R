@@ -70,13 +70,25 @@ install_if_missing <- function(pkg) {
     message("→ Installation du package : ", pkg)
     install.packages(pkg, quiet = TRUE, ask = FALSE)
   }
-  # Charger le package (en affichant un message ou silencieusement)
-  if (!suppressMessages(require(pkg, character.only = TRUE, quietly = TRUE))) {
-    message("⚠️ Impossible de charger le package : ", pkg)
+  
+  # Charger le package avec suppression des warnings pour aws.s3
+  if (pkg == "aws.s3") {
+    suppressWarnings({
+      if (!suppressMessages(require(pkg, character.only = TRUE, quietly = TRUE))) {
+        message("⚠️ Impossible de charger le package : ", pkg)
+      } else {
+        message("✓ Package chargé : ", pkg, " (warnings AWS supprimés)")
+      }
+    })
   } else {
-    message("✓ Package chargé : ", pkg)
+    if (!suppressMessages(require(pkg, character.only = TRUE, quietly = TRUE))) {
+      message("⚠️ Impossible de charger le package : ", pkg)
+    } else {
+      message("✓ Package chargé : ", pkg)
+    }
   }
 }
+
 invisible(lapply(deps, install_if_missing))
 
 # -------------------------------------------------------------------
@@ -125,4 +137,3 @@ exceptions_df <- exceptions[sapply(exceptions, function(obj) {
 })]
 
 rm(list = ls())
-

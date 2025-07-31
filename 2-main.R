@@ -30,7 +30,7 @@ resultats <- boucles_simulations(
   formule_cnr = formule_cnr,
   grh = grh,
   taux_min_grh = taux_min_grh,
-  parallel = TRUE # à mettre que si nb_sim est grand, sinon faire
+  parallel = FALSE # à mettre que si nb_sim est grand, sinon faire
                   # séquentiellement (parallel = FALSE) est plus efficace
 )
 
@@ -52,7 +52,7 @@ lire_resultats(num_dossier, nom_dossier, chemin_dossier, scenarios_nr, nom_metho
 # Appels dynamiques des fonctions de post-traitement pour chaque scénario
 for (sc in scenarios_nr) {
   num_sous_dossier <- 4 + as.integer(sc) - 1
-  chemin_sous_dossier_aws <- paste0("s3/thomasguinhut/stage_2a_enl/exports/", num_dossier, "-", nom_dossier, "/", num_dossier, ".", num_sous_dossier, "-graphiques_scenario_", sc)
+  chemin_sous_dossier_aws <- paste0("s3/thomasguinhut/stage_2a_enl/exports/", num_dossier, "-", nom_dossier, "/graphiques_scenario_", sc)
   chemin_sous_dossier_D <- paste0("R/D-exports/D", num_dossier, "-", nom_dossier, "/", "D", num_dossier, ".", num_sous_dossier, "-graphiques_scenario_", sc)
 
   dir.create(chemin_sous_dossier_D, recursive = TRUE, showWarnings = FALSE)
@@ -64,11 +64,11 @@ for (sc in scenarios_nr) {
 
   # Graphiques et tableau
   tableau_resultats(obj_brut, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D)
-  # graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D, "boxplots")
+  graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D, "boxplots")
   graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D, "biais")
-  # graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D, "eqm")
-  # taux_rep_grh(obj_taux, nb_sim, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D)
-  # comparaisons_coef_hartley(obj_biais, n_multi, n_mono)
+  graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D, "eqm")
+  taux_rep_grh(obj_taux, nb_sim, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D)
+  comparaisons_coef_hartley(obj_biais, n_multi, n_mono)
 
   # Nettoyage
   rm(obj_biais, obj_brut, obj_taux)

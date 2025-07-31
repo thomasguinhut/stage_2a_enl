@@ -13,5 +13,5 @@ comparaisons_coef_hartley <- function(df, n_mono, n_multi) {
   print(df_result)
   
   cat(paste0("\nPartage de poids : ", round(1 / 2, 3), "\n"))
-  cat(paste0("Poids relatif des échantillons (estimateur 1a) : ", round(n_mono / (n_mono + n_multi), 3), "\n"))
+  cat(paste0("Poids relatif des échantillons (estimateur 1a) : ", round(n_mono / (n_mono + n_multi), 3), "\n\n"))
 }

@@ -1,3 +1,5 @@
+source("R/B-outils/B4-estimations/B4.3-lancer_une_simulation.R")
+
 boucles_simulations <- function(nb_sim,
                                 bdd = get0("bdd", envir = .GlobalEnv, ifnotfound = NULL),
                                 nom_methodes,
