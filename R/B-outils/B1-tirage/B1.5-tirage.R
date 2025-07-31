@@ -1,5 +1,5 @@
-source("B-outils/B1-tirage/B1.1-tirage_echantillon.R")
-source("B-outils/B1-tirage/B1.4-tirage_repondants.R")
+source("R/B-outils/B1-tirage/B1.1-tirage_echantillon.R")
+source("R/B-outils/B1-tirage/B1.4-tirage_repondants.R")
 
 #' Tirage d'un échantillon stratifié en deux modes avec simulation des répondants
 #'
@@ -63,18 +63,17 @@ source("B-outils/B1-tirage/B1.4-tirage_repondants.R")
 #'
 #' @importFrom data.table as.data.table setDT
 #' @export
-tirage <- function(donnees, 
+tirage <- function(donnees,
                    n_multi,
                    n_mono,
                    part_strate_A_dans_mode_1,
                    part_strate_A_dans_mode_2,
                    nom_var_prob_internet = NULL,
                    nom_var_prob_tel = NULL,
-                   scenarios, 
+                   scenarios,
                    sigma = NULL,
                    strat_var_name,
                    modele_latent = TRUE) {
-  
   # Contrôle des arguments selon le type de modèle (latent ou pas)
   if (modele_latent) {
     if (is.null(scenarios) || is.null(sigma)) {
@@ -85,19 +84,19 @@ tirage <- function(donnees,
       stop("Pour modele_latent=FALSE, nom_var_prob_internet et nom_var_prob_tel ne doivent pas être NULL.")
     }
   }
-  
+
   # Nombre de scénarios selon le type de données fournies
   if (modele_latent) {
     nb_scenario <- length(scenarios)
   } else {
     nb_scenario <- length(nom_var_prob_internet)
   }
-  
+
   # Conversion en data.table si ce n'est pas déjà le cas
   if (!data.table::is.data.table(donnees)) {
     donnees <- data.table::as.data.table(donnees)
   }
-  
+
   # Tirage de l'échantillon stratifié à deux modes
   donnees <- tirage_echantillon(
     donnees,
@@ -107,7 +106,7 @@ tirage <- function(donnees,
     part_strate_A_dans_mode_2 = part_strate_A_dans_mode_2,
     strat_var_name = strat_var_name
   )
-  
+
   # Boucle sur chaque scénario pour simuler les répondants
   for (i in seq_len(nb_scenario)) {
     # Définition du suffixe : vide si un seul scénario, sinon _1, _2, ...
@@ -131,7 +130,7 @@ tirage <- function(donnees,
       )
     }
   }
-  
+
   # Retourner les données enrichies
   return(donnees)
 }
