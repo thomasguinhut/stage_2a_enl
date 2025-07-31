@@ -5,8 +5,8 @@ setwd("~/work/stage_2a_enl")
 ############### PRÉPARATION DES DONNÉES ET DE L'ENVIRONNEMENT ##################
 
 
-source("A-donnees/A3-importation/A3.1-importations_donnees.R")
-source("A-donnees/A3-importation/A3.2-chargement_environnement.R")
+source("A-donnees/A3-importation/A3.1-chargement_environnement.R")
+source("A-donnees/A3-importation/A3.2-importations_donnees.R")
 source("A-donnees/A3-importation/A3.3-chargement_theme_rstudio.R")
 
 

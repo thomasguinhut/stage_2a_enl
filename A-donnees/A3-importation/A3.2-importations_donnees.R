@@ -7,21 +7,13 @@ if (!(exists("sigma_1"))) {
 
 if (!(exists("bdd"))) {
   
-  if (!require("pacman")) install.packages("pacman")
-  pacman::p_load(dplyr, data.table, aws.s3)
-  
-  env <- new.env()
-  obj_name <- aws.s3::s3read_using(
-    FUN = load,
-    object = "stage_2a_enl/donnees_brut.rdata",
+  bdd_1 <- aws.s3::s3read_using(
+    FUN = arrow::read_parquet,
+    object = "stage_2a_enl/donnees_brut.parquet",
     bucket = "thomasguinhut",
-    envir = env,
+    envir = .GlobalEnv,
     opts = list("region" = "")
   )
-  
-  obj <- env[[obj_name]]
-
-  bdd_1 <- data.frame(obj[[1]])
 
   bdd_2 <- bdd_1 %>% 
     select(!starts_with("z"))
