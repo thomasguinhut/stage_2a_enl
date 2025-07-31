@@ -65,13 +65,18 @@ deps <- c("data.table", "rstudioapi", "aws.s3", "sampling", "stringr", "dplyr",
 # -------------------------------------------------------------------
 # 5. Installation des packages manquants -----------------------------
 
+# Fournir de fausses clés pour éviter le warning aws.s3
+if (nzchar(Sys.getenv("AWS_ACCESS_KEY_ID")) == FALSE) {
+  Sys.setenv("AWS_ACCESS_KEY_ID" = "dummy", "AWS_SECRET_ACCESS_KEY" = "dummy")
+}
+
 install_if_missing <- function(pkg) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
     message("→ Installation du package : ", pkg)
     install.packages(pkg, quiet = TRUE, ask = FALSE)
   }
   
-  # Charger le package avec suppression des warnings pour aws.s3
+  # Charger le package avec traitement spécial pour aws.s3
   if (pkg == "aws.s3") {
     suppressWarnings({
       if (!nzchar(Sys.getenv("AWS_ACCESS_KEY_ID"))) {
@@ -83,6 +88,13 @@ install_if_missing <- function(pkg) {
         message("✓ Package chargé : ", pkg, " (credentials AWS fictifs utilisés)")
       }
     })
+  } else {
+    # Charger tous les autres packages normalement
+    if (!suppressMessages(require(pkg, character.only = TRUE, quietly = TRUE))) {
+      message("⚠️ Impossible de charger le package : ", pkg)
+    } else {
+      message("✓ Package chargé : ", pkg)
+    }
   }
 }
 
