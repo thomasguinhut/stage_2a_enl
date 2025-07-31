@@ -10,16 +10,18 @@ Dans le cas de l'ENL, il est possible de se ramener à deux échantillons (un pr
 
 *Stage réalisé par Thomas Guinhut, élève de deuxième année à l'Ensai, du 19 mai au 1er août 2025 à la division Sondages.*
 
-# Affichage des travaux réalisés
+# Utilisation du dépôt
 
-- [ ] Ouvrir le fichier **main.R**
-- [ ] Lancer l'intégralité du script (**Ctrl+A**, puis **Ctrl+Entrée**), **OU** lancer pas à pas les différentes lignes du script pour gérer volontairement les différentes étapes du projet, notamment si vous utilisez la partie **C** pour faire un test des fonctions sur un seul échantillon
+> ⚠️ **Attention :** Le projet est configuré de sorte qu'il soit utilisé sur une plateforme Onyxia (datalab ou LS3)
+
+-   [ ] Ouvrir le fichier **main.R**
+-   [ ] Lancer l'intégralité du script (**Ctrl+A**, puis **Ctrl+Entrée**), **OU** lancer pas à pas les différentes lignes du script pour gérer volontairement les différentes étapes du projet, notamment si vous utilisez la partie **C** pour faire un test des fonctions sur un seul échantillon
 
 # Organisation du dépôt
 
-- **A** - Fonctions pour importer configurer l'environnement de travail et chager les données simulées
-- **B** - Fonctions de tirage d'échantillons, de traitement de la non-réponse et d'estimations (classiques et par combinaison des deux échantillons)
-- **C** - Application des fonctions importées en B (les scripts d'application stockés dans le dossier **C** ont pour but de voir si tout marche bien avec une seule simulation, le code pour faire n simulations est directement écrit dans la partie **C** du script main.R)
-- **D** (dossier stocké uniquement en local) - Exports des fichiers de simulations et des graphiques en PDF
+-   **A** - Fonctions pour importer configurer l'environnement de travail et chager les données simulées
+-   **B** - Fonctions de tirage d'échantillons, de traitement de la non-réponse et d'estimations (classiques et par combinaison des deux échantillons)
+-   **C** - Application des fonctions importées en B (les scripts d'application stockés dans le dossier **C** ont pour but de voir si tout marche bien avec une seule simulation, le code pour faire n simulations est directement écrit dans la partie **C** du script main.R)
+-   **D** (dossier stocké uniquement en local) - Exports des fichiers de simulations et des graphiques en PDF
 
 Le script main.R permet d'importer les fonctions de **A** et **B**. Elles sont ensuites appliquées dans la partie **C**, pour une simulation sur un seul ou n échantillons.

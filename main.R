@@ -59,8 +59,9 @@ nom_dossier <- "test"
 num_dossier <- "0"
 
 # Créer le dossier s’il n’existe pas
-chemin_dossier <- ifelse(aws == FALSE, paste0("D-exports/D", num_dossier, "-", nom_dossier),  paste0("stage_2a_enl/exports/", num_dossier, "-", nom_dossier))
-# dir.create(chemin_dossier, recursive = TRUE, showWarnings = FALSE)
+chemin_dossier <- ifelse(aws == FALSE,
+                         paste0("D-exports/D", num_dossier, "-", nom_dossier),
+                         paste0("stage_2a_enl/exports/", num_dossier, "-", nom_dossier))
 
 # Sauvegarde
 export_resultats(resultats, num_dossier, chemin_dossier, nom_dossier, aws)
@@ -72,9 +73,10 @@ lire_resultats(num_dossier, nom_dossier, chemin_dossier, scenarios_nr, nom_metho
 for (sc in scenarios_nr) {
 
   num_sous_dossier <- 4 + as.integer(sc) - 1
-  chemin_sous_dossier <- paste0("D-exports/D", num_dossier, "-", nom_dossier, "/", "D", num_dossier, ".", num_sous_dossier, "-graphiques_scenario_", sc)
+  chemin_sous_dossier_aws <- paste0("s3/thomasguinhut/stage_2a_enl/exports/", num_dossier, "-", nom_dossier, "/", num_dossier, ".", num_sous_dossier, "-graphiques_scenario_", sc)
+  chemin_sous_dossier_D <- paste0("D-exports/D", num_dossier, "-", nom_dossier, "/", "D", num_dossier, ".", num_sous_dossier, "-graphiques_scenario_", sc)
   
-  dir.create(chemin_sous_dossier, recursive = TRUE, showWarnings = FALSE)
+  dir.create(chemin_sous_dossier_D, recursive = TRUE, showWarnings = FALSE)
   
   # Récupération des objets
   obj_biais <- get(paste0(nom_dossier, "_biais"), envir = .GlobalEnv)
@@ -82,8 +84,8 @@ for (sc in scenarios_nr) {
   obj_taux <- get(paste0(nom_dossier, "_taux_rep_grh"), envir = .GlobalEnv)
   
   # Graphiques et tableau
-  tableau_resultats(obj_brut, nom_dossier, num_dossier, sc, chemin_sous_dossier, aws = FALSE)
-  graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier, "boxplots", aws = FALSE)
+  tableau_resultats(obj_brut, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D)
+  # graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier, "boxplots", aws = FALSE)
   # graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier, "biais", aws = FALSE)
   # graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier, "eqm", aws = FALSE)
   # taux_rep_grh(obj_taux, nb_sim, nom_dossier, num_dossier, sc, chemin_sous_dossier, aws = FALSE)
@@ -93,7 +95,7 @@ for (sc in scenarios_nr) {
   rm(obj_biais, obj_brut, obj_taux)
   
   cat(paste0(
-    "\nTous les tableaux et figures du scénario ", sc ," ont bien été exportés dans le dossier correspondant.\n"))
+    "\nTous les tableaux et figures du scénario ", sc ," ont bien été exportés dans le dossier correspondant.\n\n"))
 }
 
 
@@ -104,17 +106,3 @@ rm(list = ls())
 
 # Fermeture de toutes les fenêtres graphiques ouvertes
 while (dev.cur() > 1) dev.off()
-
-
-
-
-class(test_biais)
-
-
-names(bdd_avec_tirage_et_cnr_et_combi)
-
-
-
-mean(bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode[bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode == 1])
-
-str(bdd_avec_tirage_et_cnr)

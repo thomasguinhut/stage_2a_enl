@@ -89,8 +89,9 @@ try({
       if (!requireNamespace("remotes", quietly = TRUE)) {
         install.packages("remotes", quiet = TRUE, ask = FALSE)
       }
-      suppressWarnings(
-        remotes::install_github("gadenbuie/rsthemes", quiet = TRUE)
+      withCallingHandlers(
+        remotes::install_github("gadenbuie/rsthemes", quiet = TRUE),
+        warning = function(w) invokeRestart("muffleWarning")
       )
     }
   }
