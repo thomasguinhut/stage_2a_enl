@@ -2,24 +2,6 @@
 ############## APPLICATION DES TIRAGES, ESTIMATIONS ET EXPORTATIONS ############
 
 
-# ------------------------ À PARAMÉTRER ----------------------------------------
-
-nb_sim <- 50
-n_multi <- 30800
-part_idf_multimode <- 0.148
-n_mono <- 50000
-part_idf_monomode <- 0.49562
-grh <- 20
-taux_min_grh <- 0.1
-
-scenarios_nr <- c("1", "2", "3", "4")
-prefix_var_interet <- c("y_1_", "y_2_", "y_3_")
-nom_methodes <- c("1a", "1aprime", "1b", "2a", "2aprime", "3a", "3aprime", "3b", "3bprime", "4")
-formule_cnr <- "x_1 + x_2 + x_3 + x_4 + x_5"
-strat_var_name <- "strate_vec"
-
-
-
 # ---------------------------- TESTS -------------------------------------------
 
 source("R/C-application/C.1-tirage_simple.R")
@@ -48,7 +30,8 @@ resultats <- boucles_simulations(
   formule_cnr = formule_cnr,
   grh = grh,
   taux_min_grh = taux_min_grh,
-  parallel = TRUE # à mettre que si nb_sim est grand, sinon faire séquentiellement (parallel = FALSE) est plus efficace
+  parallel = TRUE # à mettre que si nb_sim est grand, sinon faire
+                  # séquentiellement (parallel = FALSE) est plus efficace
 )
 
 
@@ -97,12 +80,3 @@ for (sc in scenarios_nr) {
   unlink("R/D-exports", recursive = TRUE, force = TRUE)
   
 }
-
-
-################################ NETTOYAGE #####################################
-
-# Nettoyage de l'environnement
-rm(list = ls())
-
-# Fermeture de toutes les fenêtres graphiques ouvertes
-while (dev.cur() > 1) dev.off()
