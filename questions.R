@@ -1,0 +1,24 @@
+- vérifier les p trop faibles par méthodes des quantiles
+- revoir les arguments pr defaut des fonctions
+
+calcul variance exacte pour les deux estimateurs un seul échantillon
+
+
+La variance du bais vaut la variance de l'estimatur.
+
+
+nom_var_utilite_internet et nom_var_utilite_tel doivent être identiques
+
+modele latent marche pas
+
+pour bankier 3.a, problème avec grh si on utilise la taux de répondants. Il faut une 
+autre méthode : moyenne des bornes (si on les réestime), utiliser les premières (donc on les réestiment pas)
+
+problème avec les poids des 3a, 3aprime
+
+erreur dans les labels sur boxplots
+
+pour le rapport, calculer les theta de hartley
+pk on veut respecter la cohérence interne ? pour avoir un jeu de poids unique
+
+problème avec comparaison hartlaty ht mono ht multi

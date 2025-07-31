@@ -44,11 +44,11 @@ lire_resultats <- function(num_dossier, nom_dossier, chemin_dossier, scenarios, 
   
   # Affichage lisible sur les versions data.frame
   cat("\n", strrep("-", 50), "\n")
-  cat("\u2713  Objet : brut_", nom_dossier, "\n", sep = "")
+  cat("\u2713  Objet : ", nom_dossier, "_brut\n", sep = "")
   str(brut_df, max.level = 2, vec.len = 5)
   
   cat("\n", strrep("-", 50), "\n")
-  cat("\u2713  Objet : biais_", nom_dossier, "\n", sep = "")
+  cat("\u2713  Objet : ", nom_dossier, "_biais\n", sep = "")
   str(biais_df, max.level = 2, vec.len = 5)
   
   cat(strrep("-", 50), "\n")
@@ -68,3 +68,5 @@ lire_resultats <- function(num_dossier, nom_dossier, chemin_dossier, scenarios, 
              nbr_lignes * nb_sim,
              " lignes.\n"))
 }
+
+unique(test_biais$)

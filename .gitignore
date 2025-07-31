@@ -9,3 +9,4 @@
 *.pdf
 D*/
 .Rproj.user
+*.parquet
