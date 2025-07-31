@@ -8,7 +8,6 @@ setwd("~/work/stage_2a_enl")
 source("A-donnees/A3-importation/A3.1-importations_donnees.R")
 source("A-donnees/A3-importation/A3.2-chargement_environnement.R")
 source("A-donnees/A3-importation/A3.3-chargement_theme_rstudio.R")
-chargement_theme_rstudio()
 
 
 
@@ -28,3 +27,5 @@ source("B-outils/B6-tableaux_figures/B6.1-tableau_resultats.R")
 source("B-outils/B6-tableaux_figures/B6.2-graphique_principal.R")
 source("B-outils/B6-tableaux_figures/B6.3-taux_rep_grh.R")
 source("B-outils/B6-tableaux_figures/B6.4-comparaisons_coef_hartley.R")
+
+chargement_theme_rstudio()
