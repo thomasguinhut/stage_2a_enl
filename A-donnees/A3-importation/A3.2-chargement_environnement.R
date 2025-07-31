@@ -1,9 +1,55 @@
-if (!require("pacman")) install.packages("pacman")
-pacman::p_load(
-  dplyr, data.table, survey, torch, pbivnorm, sampling, doParallel, foreach, base,
-  parallel, stringr, forcats, ggplot2, ggthemes, tidyverse, ggh4x, ggtext, gridExtra, 
-  tidyr, purrr, grid, patchwork, pbapply, future.apply, future, doFuture, progressr
-)
+# setup.R
+# Script pour installer les packages nécessaires au projet
+# dans un environnement RStudio Onyxia, avec gestion renv
+
+# -------------------------------------------------------------------
+# 1. Configuration de l'environnement --------------------------------
+.libPaths(c("/home/onyxia/work/userLibrary", .libPaths()))
+options(renv.config.sandbox.enabled = FALSE)
+
+# -------------------------------------------------------------------
+# 2. Chargement (ou installation) de renv ----------------------------
+if (!requireNamespace("renv", quietly = TRUE)) {
+  install.packages("renv")
+}
+library(renv)
+
+# -------------------------------------------------------------------
+# 3. Détection des dépendances ---------------------------------------
+deps <- unique(renv::dependencies(path = ".", progress = FALSE)$Package)
+
+# Exclusion des packages problématiques ou non nécessaires
+excluded <- c("renv", "git2r", "rsthemes")
+deps <- setdiff(deps, excluded)
+
+# -------------------------------------------------------------------
+# 4. Installation des packages manquants -----------------------------
+install_if_missing <- function(pkg) {
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    message("→ Installation du package : ", pkg)
+    install.packages(pkg)
+  } else {
+    message("✓ Package déjà installé : ", pkg)
+  }
+}
+invisible(lapply(deps, install_if_missing))
+
+# -------------------------------------------------------------------
+# 5. Installation optionnelle de rsthemes ----------------------------
+# Attention : peut échouer dans Onyxia si dépendances système manquantes
+try({
+  if (!requireNamespace("rsthemes", quietly = TRUE)) {
+    if (!requireNamespace("devtools", quietly = TRUE)) {
+      install.packages("devtools")
+    }
+    devtools::install_github("gadenbuie/rsthemes")
+  }
+}, silent = TRUE)
+
+# -------------------------------------------------------------------
+# 6. Snapshot renv ---------------------------------------------------
+renv::snapshot(prompt = FALSE)
+message("✅ Installation terminée et environnement enregistré avec renv.")
 
 exceptions <- c(
   "bdd", "sigma_1", "resultats",
