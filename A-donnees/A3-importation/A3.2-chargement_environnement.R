@@ -19,7 +19,7 @@ options(
 message("Version R détectée : ", getRversion())
 
 check_libgit2 <- tryCatch(
-  system("ldconfig -p | grep libgit2", intern = TRUE),
+  suppressWarnings(system("ldconfig -p 2>/dev/null | grep libgit2", intern = TRUE)),
   error = function(e) character(0)
 )
 
@@ -41,8 +41,18 @@ if (!requireNamespace("renv", quietly = TRUE)) {
 
 suppressMessages(suppressPackageStartupMessages({
   library(renv)
-  options(renv.config.restore.prompt = FALSE)
-  renv::restore(prompt = FALSE)
+  options(
+    renv.config.restore.prompt = FALSE,
+    renv.consent = TRUE             # ✅ consentement explicite
+  )
+  Sys.setenv(RENV_FORCE_PROMPT = "FALSE")
+  
+  if (!file.exists("renv.lock")) {
+    message("🔧 Aucun renv.lock détecté, initialisation de renv...")
+    renv::init(bare = TRUE, restart = FALSE, prompt = FALSE)
+  } else {
+    renv::restore(prompt = FALSE)
+  }
 }))
 
 # -------------------------------------------------------------------
@@ -58,8 +68,12 @@ install_if_missing <- function(pkg) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
     message("→ Installation du package : ", pkg)
     install.packages(pkg, quiet = TRUE, ask = FALSE)
+  }
+  # Charger le package (en affichant un message ou silencieusement)
+  if (!suppressMessages(require(pkg, character.only = TRUE, quietly = TRUE))) {
+    message("⚠️ Impossible de charger le package : ", pkg)
   } else {
-    message("✓ Package déjà installé : ", pkg)
+    message("✓ Package chargé : ", pkg)
   }
 }
 invisible(lapply(deps, install_if_missing))
@@ -106,5 +120,5 @@ exceptions_df <- exceptions[sapply(exceptions, function(obj) {
     )
 })]
 
-rm(list = setdiff(ls(envir = .GlobalEnv), exceptions_df), envir = .GlobalEnv)
-message("🧹 Environnement global nettoyé, exceptions conservées.")
+rm(list = ls())
+

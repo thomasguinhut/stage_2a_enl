@@ -37,17 +37,25 @@ if (!(exists("bdd"))) {
 
   bdd <- bdd_5
   
-  rm(bdd_1, bdd_2, bdd_3, bdd_4, bdd_5, obj_name, obj, env)
+  rm(bdd_1, bdd_2, bdd_3, bdd_4, bdd_5)
   
 }
 
-rm(generer_variables_par_strate)
+exceptions <- c(
+  "bdd", "sigma_1", "resultats",
+  ls(pattern = "biais$"),
+  ls(pattern = "brut$"),
+  ls(pattern = "taux_rep_grh$"),
+  ls(pattern = "poids_moyens$")
+)
 
-# summary(bdd)
-# str(bdd)
-# round(prop.table(table(bdd$strate_vec)) * 100, 1) 
+exceptions_df <- exceptions[sapply(exceptions, function(obj) {
+  exists(obj, envir = .GlobalEnv) && 
+    (
+      is.data.frame(get(obj, envir = .GlobalEnv)) || 
+        (requireNamespace("data.table", quietly = TRUE) && data.table::is.data.table(get(obj, envir = .GlobalEnv))) || 
+        is.matrix(get(obj, envir = .GlobalEnv))
+    )
+})]
 
-# Description des donnees :
-# - 5 variables auxiliaires x
-# - strate_vec prend 2 modalites : "A" (Hors Idf) et "B" (Idf)
-# - on prend les variables "_1", les autres cas c'est pour prendre en compte différents degrés d'homogénéité
+rm(list = setdiff(ls(envir = .GlobalEnv), exceptions_df), envir = .GlobalEnv)
