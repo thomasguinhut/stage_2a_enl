@@ -32,5 +32,5 @@ Dans le cas de l'ENL, il est possible de se ramener à deux échantillons (un pr
 
 -   **A** - Fonctions pour importer configurer l'environnement de travail et charger les données simulées
 -   **B** - Fonctions de tirage d'échantillons, de traitement de la non-réponse et d'estimations (classiques et par combinaison des deux échantillons)
--   **C** - Application des fonctions importées en B pour un seul tirage. Ces scripts ont pour but de voir si tout marche bien, le code pour faire n simulations étant directement écrit dans main.R avec la fonction boucles_simulation.
+-   **C** - Application des fonctions importées en B pour un seul tirage. Ces scripts ont pour but de voir si tout marche bien, le code pour faire n simulations étant directement écrit dans main.R avec la fonction boucles_simulations.
 
