@@ -22,7 +22,7 @@ Dans le cas de l'ENL, il est possible de se ramener à deux échantillons (un pr
 
 # Utilisation du dépôt
 
-> ⚠️ **Attention :** Le projet est configuré de sorte qu'il soit utilisé sur une plateforme Onyxia (datalab ou LS3). En particulier, il est nécéssaire de disposer dans son explorateur de fichiers d'un bucket Minio nommé "stage_2a_enl", avec à l'intérieur la base de sondage simulée nommée "donnees_brut.parquet".
+> ⚠️ **Attention :** Le projet est configuré de sorte qu'il soit utilisé sur une plateforme Onyxia (datalab ou LS3). En particulier, il est nécéssaire de disposer dans son bucket MinIO d'un dossier nommé "stage_2a_enl", avec à l'intérieur la base de sondage simulée nommée "donnees_brut.parquet".
 
 -   [ ] Ouvrir et lancer l'intégralité du script **0-installation.R** (**Ctrl+A**, puis **Ctrl+Entrée**) pour charger les packages, les données et les fonctions. Ce script charge également le thème de R Studio ; pour désactiver cette option, mettez la deuxième ligne de code de ce scrit en commentaire.
 -   [ ] Ouvrir et lancer l'intégralité du script **1-parametrage.R** (**Ctrl+A**, puis **Ctrl+Entrée**) pour charger les variables d'environnement nécessaires au lancement des simulations et à l'exportation des graphiques et tableaux.
