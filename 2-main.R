@@ -30,8 +30,8 @@ resultats <- boucles_simulations(
   formule_cnr = formule_cnr,
   grh = grh,
   taux_min_grh = taux_min_grh,
-  parallel = TRUE # à mettre que si nb_sim est grand, sinon faire
-                  # séquentiellement (parallel = FALSE) est plus efficace
+  parallel = TRUE,
+  n_cores = 5
 )
 
 

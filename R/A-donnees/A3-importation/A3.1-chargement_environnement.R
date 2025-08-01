@@ -58,9 +58,26 @@ suppressMessages(suppressPackageStartupMessages({
 # -------------------------------------------------------------------
 # 4. Liste des packages à installer et charger -----------------------
 
-deps <- c("data.table", "rstudioapi", "aws.s3", "sampling", "stringr", "dplyr",
-          "parallel", "survey", "readr", "ggplot2", "ggthemes", "tidyverse",
-          "ggh4x", "ggtext", "gridExtra", "tidyr", "grid")
+deps <- c(
+  # Pour gestion data et manipulation
+  "data.table", "dplyr", "tidyr", "tidyverse", "readr",
+  
+  # Pour string manipulation
+  "stringr",
+  
+  # Parallélisme et calcul
+  "parallel", "foreach", "doParallel",
+  
+  # Pour sondage, tirage et estimations
+  "survey", "sampling",
+  
+  # Visualisation et graphiques
+  "ggplot2", "ggthemes", "ggh4x", "ggtext", "gridExtra", "grid",
+  
+  # Outils spécifiques
+  "rstudioapi", "aws.s3"
+)
+
 
 # -------------------------------------------------------------------
 # 5. Installation des packages manquants -----------------------------

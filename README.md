@@ -1,10 +1,20 @@
-# Objectif du stage
 
-Recherche, application et comparaison des méthodes de combinaison d’échantillons issus d’enquêtes par sondage, pour tenter d’améliorer la qualité des estimations nationales et régionales habituellement réalisées à partir d’un seul échantillon.
+# Objectifs du stage
 
-Travaux menés à la suite de ceux de Khaled Larbi pour l’Enquête Nationale sur les Logements (ENL), grande enquête apériodique et historique de l’Insee dont l’édition 2023-2024 a la particularité d’avoir été multimode (entretiens par téléphone, internet ou face-à-face) et composée de plusieurs échantillons, dont l’un surreprésente la région Île-de-France avec des réponses collectées par internet.
+Recherche, application et comparaison des méthodes de combinaison de plusieurs échantillons issus d’enquêtes par sondage, pour tenter d’améliorer la qualité des estimations nationales et régionales habituellement réalisées à partir d’un seul échantillon.
 
-Au total, 9 estimateurs applicables à l'ENL ont été identifiés. Ils sont comparés entre eux, ainsi qu’à des estimateurs classiques utilisés sur un seul échantillon pour voir si la combinaison est bénéfique.
+Travaux menés à la suite de ceux de Khaled Larbi pour l’Enquête Nationale sur les Logements (ENL), grande enquête apériodique et historique de l’Insee dont l’édition 2023-2024 a la particularité d’avoir été multimode (entretiens par téléphone, internet ou face-à-face) et composée de plusieurs échantillons, dont l’un, d'une taille plus grande que les autres, surreprésente la région Île-de-France avec des réponses collectées par internet.
+
+Au total, 10 estimateurs applicables à l'ENL ont été identifiés. Ils sont comparés entre eux, ainsi qu’à des estimateurs classiques utilisés sur un seul échantillon pour voir si la combinaison est bénéfique. Chaque estimateur est testé selon 3 méthodes de correction de la non-réponse : non-réponse corrigée avec les vraies probabilités de réponse, non-réponse corrigée avec une estimation des probabilités de réponse, et non-réponse corrigée avec des groupes homohènes de réponse (GRH), construits à partir des estimations de probabilités de réponse. Le estimateurs sont également analysés lorqu'il n'y a pas de non-réponse.
+
+Différents scénarios de non-réponse peuvent être testés :
+
+| Scénario | Endogénéité totale | Endogénéité internet |
+|----------|--------------------|----------------------|
+| 1        | ❌                 | ❌                   |
+| 2        | ❌                 | ✅ ✅ ✅             |
+| 3        | ✅                 | ✅ ✅ ✅             |
+| 4        | ✅ ✅ ✅           | ✅ ✅ ✅             |
 
 Dans le cas de l'ENL, il est possible de se ramener à deux échantillons (un premier échantillon avec des réponses multimode et un deuxième avec des réponses collectées en monomode internet, avec surreprésentation des logements situés en région Île-de-France). Nous nous plaçons dans ce cas de figure pour réaliser ici les simulations de combinaison d'échantillons.
 
@@ -14,14 +24,12 @@ Dans le cas de l'ENL, il est possible de se ramener à deux échantillons (un pr
 
 > ⚠️ **Attention :** Le projet est configuré de sorte qu'il soit utilisé sur une plateforme Onyxia (datalab ou LS3)
 
--   [ ] Ouvrir le fichier **main.R**
--   [ ] Lancer l'intégralité du script (**Ctrl+A**, puis **Ctrl+Entrée**), **OU** lancer pas à pas les différentes lignes du script pour gérer volontairement les différentes étapes du projet, notamment si vous utilisez la partie **C** pour faire un test des fonctions sur un seul échantillon
+-   [ ] Ouvrir et lancer l'intégralité du script **0-installation.R** (**Ctrl+A**, puis **Ctrl+Entrée**) pour charger les packages, les données et les fonctions. Ce script change égaleent le thème de R studio ; pour désactiver cette option, mettez la deuxième ligne de code de ce scrit en commentaire.
+-   [ ] Ouvrir et lancer l'intégralité du script **1-parametrage.R** (**Ctrl+A**, puis **Ctrl+Entrée**) pour charger les variables d'environnement nécessaire au lancement des simulations et à l'exportation des graphiques et tableaux.
+-   [ ] Ouvrir et lancer pas à pas les différentes lignes du script **2-main.R** pour gérer volontairement les différentes étapes du projet (faire un test des fonctions sur un seul échantillon, lancer un grand nombre de simulations ou exporter les résultats dans MinIO.
 
-# Organisation du dépôt
+# Organisation du dossier R
 
 -   **A** - Fonctions pour importer configurer l'environnement de travail et chager les données simulées
 -   **B** - Fonctions de tirage d'échantillons, de traitement de la non-réponse et d'estimations (classiques et par combinaison des deux échantillons)
--   **C** - Application des fonctions importées en B (les scripts d'application stockés dans le dossier **C** ont pour but de voir si tout marche bien avec une seule simulation, le code pour faire n simulations est directement écrit dans la partie **C** du script main.R)
--   **D** (dossier stocké uniquement en local) - Exports des fichiers de simulations et des graphiques en PDF
-
-Le script main.R permet d'importer les fonctions de **A** et **B**. Elles sont ensuites appliquées dans la partie **C**, pour une simulation sur un seul ou n échantillons.
+-   **C** - Application des fonctions importées en B (les scripts d'application stockés dans le dossier **C** ont pour but de voir si tout marche bien avec une seule simulation, le code pour faire n simulations est directement écrit dans main.R avec la fonction boucles_simulation)
