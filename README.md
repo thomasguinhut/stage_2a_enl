@@ -16,7 +16,7 @@ Différents scénarios de non-réponse peuvent être testés :
 | 3        | ✅                 | ✅ ✅ ✅             |
 | 4        | ✅ ✅ ✅           | ✅ ✅ ✅             |
 
-Dans le cas de l'ENL, il est possible de se ramener à deux échantillons (un premier échantillon avec des réponses multimode et un deuxième avec des réponses collectées en monomode internet, avec surreprésentation des logements situés en région Île-de-France). Nous nous plaçons dans ce cas de figure pour réaliser ici les simulations de combinaison d'échantillons.
+Dans le cas de l'ENL, il est possible de se ramener à deux échantillons (un premier échantillon avec des réponses multimode et un deuxième avec des réponses collectées en monomode internet, avec surreprésentation des logements situés en région Île-de-France). Nous nous plaçons dans ce cas de figure pour réaliser ici les simulations de combinaison d'échantillons. Pour simplifier la modélisation, le multimode porte ici sur la collecte par internet et par téléphone, avec une préférence pour le téléphone.
 
 *Stage réalisé par Thomas Guinhut, élève de deuxième année à l'Ensai, du 19 mai au 1er août 2025 à la division Sondages.*
 
