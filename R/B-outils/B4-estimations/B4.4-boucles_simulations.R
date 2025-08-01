@@ -41,7 +41,7 @@ boucles_simulations <- function(nb_sim,
     }
 
     if (is.null(n_cores)) {
-      n_cores <- min(parallel::detectCores(), nb_sim)
+      n_cores <- min(parallel::detectCores() - 1, nb_sim)
     }
 
     if (is.null(batch_size)) {
@@ -99,6 +99,13 @@ boucles_simulations <- function(nb_sim,
     parallel::clusterExport(cl, light_vars, envir = environment())
 
     parallel::clusterEvalQ(cl, {
+      
+      library(survey)
+      library(dplyr)
+      library(sampling) 
+      library(data.table)
+      library(stringr)
+      
       if (!is.null(source_files)) {
         lapply(source_files, source)
       }

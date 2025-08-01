@@ -15,6 +15,11 @@ lancer_une_simulation <- function(i,
                                   formule_cnr,
                                   grh,
                                   taux_min_grh) {
+  
+  if ("4" %in% nom_methodes) {
+    nom_methodes <- unique(c(nom_methodes, "4A", "4B"))
+  }
+  
   res_list <- boucles_estimations(
     bdd = bdd,
     nom_methodes = nom_methodes,

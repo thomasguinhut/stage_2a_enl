@@ -137,12 +137,12 @@ exceptions <- c(
 )
 
 exceptions_df <- exceptions[sapply(exceptions, function(obj) {
-  exists(obj, envir = .GlobalEnv) && 
+  exists(obj, envir = .GlobalEnv) &&
     (
-      is.data.frame(get(obj, envir = .GlobalEnv)) || 
-        (requireNamespace("data.table", quietly = TRUE) && data.table::is.data.table(get(obj, envir = .GlobalEnv))) || 
+      is.data.frame(get(obj, envir = .GlobalEnv)) ||
+        (requireNamespace("data.table", quietly = TRUE) && data.table::is.data.table(get(obj, envir = .GlobalEnv))) ||
         is.matrix(get(obj, envir = .GlobalEnv))
     )
 })]
 
-rm(list = ls())
+rm(list = setdiff(ls(envir = .GlobalEnv), exceptions_df), envir = .GlobalEnv)
