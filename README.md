@@ -24,12 +24,13 @@ Dans le cas de l'ENL, il est possible de se ramener à deux échantillons (un pr
 
 > ⚠️ **Attention :** Le projet est configuré de sorte qu'il soit utilisé sur une plateforme Onyxia (datalab ou LS3)
 
--   [ ] Ouvrir et lancer l'intégralité du script **0-installation.R** (**Ctrl+A**, puis **Ctrl+Entrée**) pour charger les packages, les données et les fonctions. Ce script change égaleent le thème de R studio ; pour désactiver cette option, mettez la deuxième ligne de code de ce scrit en commentaire.
--   [ ] Ouvrir et lancer l'intégralité du script **1-parametrage.R** (**Ctrl+A**, puis **Ctrl+Entrée**) pour charger les variables d'environnement nécessaire au lancement des simulations et à l'exportation des graphiques et tableaux.
--   [ ] Ouvrir et lancer pas à pas les différentes lignes du script **2-main.R** pour gérer volontairement les différentes étapes du projet (faire un test des fonctions sur un seul échantillon, lancer un grand nombre de simulations ou exporter les résultats dans MinIO.
+-   [ ] Ouvrir et lancer l'intégralité du script **0-installation.R** (**Ctrl+A**, puis **Ctrl+Entrée**) pour charger les packages, les données et les fonctions. Ce script charge également le thème de R Studio ; pour désactiver cette option, mettez la deuxième ligne de code de ce scrit en commentaire.
+-   [ ] Ouvrir et lancer l'intégralité du script **1-parametrage.R** (**Ctrl+A**, puis **Ctrl+Entrée**) pour charger les variables d'environnement nécessaires au lancement des simulations et à l'exportation des graphiques et tableaux.
+-   [ ] Ouvrir et lancer pas à pas les différentes lignes du script **2-main.R** pour, au choix, faire un test des fonctions sur un seul échantillon, ou lancer un grand nombre de simulations et exporter les résultats dans MinIO.
 
 # Organisation du dossier R
 
--   **A** - Fonctions pour importer configurer l'environnement de travail et chager les données simulées
+-   **A** - Fonctions pour importer configurer l'environnement de travail et charger les données simulées
 -   **B** - Fonctions de tirage d'échantillons, de traitement de la non-réponse et d'estimations (classiques et par combinaison des deux échantillons)
--   **C** - Application des fonctions importées en B (les scripts d'application stockés dans le dossier **C** ont pour but de voir si tout marche bien avec une seule simulation, le code pour faire n simulations est directement écrit dans main.R avec la fonction boucles_simulation)
+-   **C** - Application des fonctions importées en B pour un seul tirage. Ces scripts ont pour but de voir si tout marche bien, le code pour faire n simulations étant directement écrit dans main.R avec la fonction boucles_simulation.
+
