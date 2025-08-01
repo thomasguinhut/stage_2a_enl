@@ -1,7 +1,7 @@
 
 # Objectifs du stage
 
-Recherche, application et comparaison des méthodes de combinaison de plusieurs échantillons issus d’enquêtes par sondage, pour tenter d’améliorer la qualité des estimations nationales et régionales habituellement réalisées à partir d’un seul échantillon.
+Recherche, application et comparaison par simulations Monte-Carlo des méthodes de combinaison de plusieurs échantillons issus d’enquêtes par sondage, pour tenter d’améliorer la qualité des estimations nationales et régionales habituellement réalisées à partir d’un seul échantillon.
 
 Travaux menés à la suite de ceux de Khaled Larbi pour l’Enquête Nationale sur les Logements (ENL), grande enquête apériodique et historique de l’Insee dont l’édition 2023-2024 a la particularité d’avoir été multimode (entretiens par téléphone, internet ou face-à-face) et composée de plusieurs échantillons, dont l’un, d'une taille plus grande que les autres, surreprésente la région Île-de-France avec des réponses collectées par internet.
 
