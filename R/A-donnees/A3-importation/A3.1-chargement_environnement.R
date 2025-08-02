@@ -1,20 +1,21 @@
-# setup.R
-# Script non interactif pour installer les packages nécessaires
-# dans un environnement RStudio Onyxia, avec gestion renv
 
 # -------------------------------------------------------------------
 # 1. Configuration de l'environnement --------------------------------
 .libPaths(c("/home/onyxia/work/userLibrary", .libPaths()))
 
-# Options pour désactiver toutes les interactions utilisateur
 options(
   renv.config.sandbox.enabled = FALSE,
   ask = FALSE,
   install.packages.check.source = "no"
 )
 
+# Définir une variable d'environnement GITHUB_PAT pour remotes::install_github
+if (nzchar(Sys.getenv("GITHUB_PAT")) == FALSE) {
+  Sys.setenv(GITHUB_PAT = "ghp_FAKE_TOKEN_FOR_NON_INTERACTIVE_USE_ONLY")
+}
+
 # -------------------------------------------------------------------
-# 2. Détection versions et dépendances système ----------------------
+# 2. Détection versions et dépendances système -----------------------
 
 message("Version R détectée : ", getRversion())
 
@@ -43,7 +44,7 @@ suppressMessages(suppressPackageStartupMessages({
   library(renv)
   options(
     renv.config.restore.prompt = FALSE,
-    renv.consent = TRUE             # ✅ consentement explicite
+    renv.consent = TRUE
   )
   Sys.setenv(RENV_FORCE_PROMPT = "FALSE")
   
@@ -59,25 +60,13 @@ suppressMessages(suppressPackageStartupMessages({
 # 4. Liste des packages à installer et charger -----------------------
 
 deps <- c(
-  # Pour gestion data et manipulation
   "data.table", "dplyr", "tidyr", "tidyverse", "readr",
-  
-  # Pour string manipulation
   "stringr",
-  
-  # Parallélisme et calcul
   "parallel", "foreach", "doParallel",
-  
-  # Pour sondage, tirage et estimations
   "survey", "sampling",
-  
-  # Visualisation et graphiques
   "ggplot2", "ggthemes", "ggh4x", "ggtext", "gridExtra", "grid",
-  
-  # Outils spécifiques
   "rstudioapi", "aws.s3"
 )
-
 
 # -------------------------------------------------------------------
 # 5. Installation des packages manquants -----------------------------
@@ -106,7 +95,6 @@ install_if_missing <- function(pkg) {
       }
     })
   } else {
-    # Charger tous les autres packages normalement
     if (!suppressMessages(require(pkg, character.only = TRUE, quietly = TRUE))) {
       message("⚠️ Impossible de charger le package : ", pkg)
     } else {
@@ -163,3 +151,4 @@ exceptions_df <- exceptions[sapply(exceptions, function(obj) {
 })]
 
 rm(list = setdiff(ls(envir = .GlobalEnv), exceptions_df), envir = .GlobalEnv)
+

@@ -30,8 +30,7 @@ resultats <- boucles_simulations(
   formule_cnr = formule_cnr,
   grh = grh,
   taux_min_grh = taux_min_grh,
-  parallel = FALSE,
-  n_cores = 5
+  parallel = FALSE
 )
 
 

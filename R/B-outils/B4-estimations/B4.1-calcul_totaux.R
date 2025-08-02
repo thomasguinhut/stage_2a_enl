@@ -28,11 +28,10 @@ calcul_totaux <- function(table_post_sim,
   
   # Combiner les deux
   poids_fixes <- c(poids_fixes, poids_dynamiques)
-  print(poids_fixes)
-  print(table_post_sim)
+
   # On garde que ceux qui existent vraiment dans la table
   poids_fixes <- intersect(poids_fixes, colnames(table_post_sim))
-  print(poids_fixes)
+
   # Chercher les poids avec suffixe dynamique
   variables_dynamiques <- grep(
     paste0("^(", paste("poids", collapse = "|"), ")(|.*", suffixe, ")$"),
