@@ -3,8 +3,7 @@
 
 
 source("R/A-donnees/A3-importation/A3.1-chargement_environnement.R")
-source("R/A-donnees/A3-importation/A3.2-chargement_theme_rstudio.R")
-source("R/A-donnees/A3-importation/A3.3-importations_donnees.R")
+source("R/A-donnees/A3-importation/A3.2-importations_donnees.R")
 
 
 ################################# Étape B ######################################

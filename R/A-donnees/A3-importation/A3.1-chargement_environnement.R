@@ -1,37 +1,17 @@
+# setup.R
+# Script non interactif pour installer les packages nécessaires
+# dans un environnement RStudio Onyxia, avec gestion renv
 
 # -------------------------------------------------------------------
 # 1. Configuration de l'environnement --------------------------------
 .libPaths(c("/home/onyxia/work/userLibrary", .libPaths()))
 
+# Options pour désactiver toutes les interactions utilisateur
 options(
   renv.config.sandbox.enabled = FALSE,
   ask = FALSE,
   install.packages.check.source = "no"
 )
-
-# Définir une variable d'environnement GITHUB_PAT pour remotes::install_github
-if (nzchar(Sys.getenv("GITHUB_PAT")) == FALSE) {
-  Sys.setenv(GITHUB_PAT = "ghp_FAKE_TOKEN_FOR_NON_INTERACTIVE_USE_ONLY")
-}
-
-# -------------------------------------------------------------------
-# 2. Détection versions et dépendances système -----------------------
-
-message("Version R détectée : ", getRversion())
-
-check_libgit2 <- tryCatch(
-  suppressWarnings(system("ldconfig -p 2>/dev/null | grep libgit2", intern = TRUE)),
-  error = function(e) character(0)
-)
-
-excluded <- c()
-
-if (length(check_libgit2) == 0) {
-  message("⚠️ libgit2 non détectée, exclusion de git2r")
-  excluded <- c(excluded, "git2r")
-} else {
-  message("libgit2 détectée, git2r sera installé si besoin")
-}
 
 # -------------------------------------------------------------------
 # 3. Chargement (ou installation) de renv ----------------------------
@@ -44,7 +24,7 @@ suppressMessages(suppressPackageStartupMessages({
   library(renv)
   options(
     renv.config.restore.prompt = FALSE,
-    renv.consent = TRUE
+    renv.consent = TRUE             # ✅ consentement explicite
   )
   Sys.setenv(RENV_FORCE_PROMPT = "FALSE")
   
@@ -60,12 +40,23 @@ suppressMessages(suppressPackageStartupMessages({
 # 4. Liste des packages à installer et charger -----------------------
 
 deps <- c(
+  # Pour gestion data et manipulation
   "data.table", "dplyr", "tidyr", "tidyverse", "readr",
+  
+  # Pour string manipulation
   "stringr",
+  
+  # Parallélisme et calcul
   "parallel", "foreach", "doParallel",
+  
+  # Pour sondage, tirage et estimations
   "survey", "sampling",
+  
+  # Visualisation et graphiques
   "ggplot2", "ggthemes", "ggh4x", "ggtext", "gridExtra", "grid",
-  "rstudioapi", "aws.s3"
+  
+  # Outils spécifiques
+  "aws.s3"
 )
 
 # -------------------------------------------------------------------
@@ -95,6 +86,7 @@ install_if_missing <- function(pkg) {
       }
     })
   } else {
+    # Charger tous les autres packages normalement
     if (!suppressMessages(require(pkg, character.only = TRUE, quietly = TRUE))) {
       message("⚠️ Impossible de charger le package : ", pkg)
     } else {
@@ -106,32 +98,13 @@ install_if_missing <- function(pkg) {
 invisible(lapply(deps, install_if_missing))
 
 # -------------------------------------------------------------------
-# 6. Installation optionnelle de rsthemes ----------------------------
-
-try({
-  if (!"rsthemes" %in% installed.packages()[, "Package"]) {
-    if ("git2r" %in% excluded) {
-      message("⚠️ Installation de rsthemes ignorée (dépendances système manquantes)")
-    } else {
-      if (!requireNamespace("remotes", quietly = TRUE)) {
-        install.packages("remotes", quiet = TRUE, ask = FALSE)
-      }
-      withCallingHandlers(
-        remotes::install_github("gadenbuie/rsthemes", quiet = TRUE),
-        warning = function(w) invokeRestart("muffleWarning")
-      )
-    }
-  }
-}, silent = TRUE)
-
-# -------------------------------------------------------------------
-# 7. Snapshot renv ---------------------------------------------------
+# 6. Snapshot renv ---------------------------------------------------
 
 renv::snapshot(prompt = FALSE)
 message("✅ Installation terminée et environnement enregistré avec renv.")
 
 # -------------------------------------------------------------------
-# 8. Nettoyage de l'environnement global -----------------------------
+# 7. Nettoyage de l'environnement global -----------------------------
 
 exceptions <- c(
   "bdd", "sigma_1", "resultats",
@@ -151,4 +124,3 @@ exceptions_df <- exceptions[sapply(exceptions, function(obj) {
 })]
 
 rm(list = setdiff(ls(envir = .GlobalEnv), exceptions_df), envir = .GlobalEnv)
-

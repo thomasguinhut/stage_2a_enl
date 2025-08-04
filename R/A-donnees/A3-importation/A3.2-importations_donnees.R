@@ -59,3 +59,4 @@ exceptions_df <- exceptions[sapply(exceptions, function(obj) {
 })]
 
 rm(list = setdiff(ls(envir = .GlobalEnv), exceptions_df), envir = .GlobalEnv)
+gc()
