@@ -6,12 +6,11 @@ if (!(exists("sigma_1"))) {
 }
 
 if (!(exists("bdd"))) {
-  bdd_1 <- aws.s3::s3read_using(
-    FUN = arrow::read_parquet,
-    object = "stage_2a_enl/donnees_brut.parquet",
-    bucket = "thomasguinhut",
-    envir = .GlobalEnv,
-    opts = list("region" = "")
+  bdd_1 <- arrow::open_dataset(
+    sources = "s3://thomasguinhut/stage_2a_enl/donnees_brut.parquet",
+    format = "parquet",
+    filesystem = "s3",
+    uri = NULL
   )
 
   bdd_2 <- bdd_1 %>%

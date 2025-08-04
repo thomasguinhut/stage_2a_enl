@@ -104,6 +104,12 @@ graphique_principal <- function(df, nb_sim, nom_methodes, nom_dossier, num_dossi
       "Bankier avec indépendance et CNR après (3a)",
       "Bankier avec indépendance et CNR avant (3b)"
     )
+    
+    # Ajouter Elliott et Davis (4) si condition remplie
+    if ("4" %in% nom_methodes && sc != "2") {
+      estimateurs_a_exclure <- c(estimateurs_a_exclure, "Elliott et Davis (4)")
+    }
+    
     data_clean <- data_clean %>%
       filter(!estimateur %in% estimateurs_a_exclure)
     
@@ -111,8 +117,17 @@ graphique_principal <- function(df, nb_sim, nom_methodes, nom_dossier, num_dossi
     noms_estimateurs_filtres <- noms_estimateurs[!noms_estimateurs %in% estimateurs_a_exclure]
     data_clean$estimateur <- factor(data_clean$estimateur, levels = noms_estimateurs_filtres)
   } else {
-    # Facteur ordonné avec tous les estimateurs
-    data_clean$estimateur <- factor(data_clean$estimateur, levels = noms_estimateurs)
+    # Condition séparée pour Elliott et Davis (4) quand la première condition n'est pas remplie
+    if (type_graphique == "eqm" && "4" %in% nom_methodes && sc != "2") {
+      data_clean <- data_clean %>%
+        filter(estimateur != "Elliott et Davis (4)")
+      
+      noms_estimateurs_filtres <- noms_estimateurs[noms_estimateurs != "Elliott et Davis (4)"]
+      data_clean$estimateur <- factor(data_clean$estimateur, levels = noms_estimateurs_filtres)
+    } else {
+      # Facteur ordonné avec tous les estimateurs
+      data_clean$estimateur <- factor(data_clean$estimateur, levels = noms_estimateurs)
+    }
   }
   
   # Choix variable et label selon type_graphique

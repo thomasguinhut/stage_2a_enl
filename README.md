@@ -1,7 +1,11 @@
 # Y a-t-il un intérêt à combiner des échantillons issus d’une même enquête par sondage, mais tirés différemment ?
 
-> **Stage réalisé par Thomas Guinhut, élève de deuxième année à l'Ensai**\
-> 📅 *19 mai - 1er août 2025, division Sondages (DMCSI)*
+> **Stage réalisé par Thomas Guinhut**, élève de deuxième année à l'[Ensai](https://www.ensai.fr), sous l'encadrement de :  
+> • **Emmanuel Gros** — Chef de la division Sondages (DMCSI, Insee)  
+> • **Guillaume Chauvet** — Enseignant-chercheur en statistique d'enquête à l'Ensai
+>
+> 📅 **Période** : 19 mai – 1er août 2025  
+> 🏢 **Lieu** : Division Sondages (DMCSI, Insee)
 
 ------------------------------------------------------------------------
 
@@ -43,7 +47,7 @@ Pour simplifier la modélisation, le multimode porte ici sur la collecte par int
 ## 🚀 Utilisation du dépôt
 
 > ⚠️ **Prérequis important**\
-> Le projet est configuré de sorte qu'il soit utilisé sur une plateforme Onyxia (datalab ou LS3). En particulier, avant tout lancement de programme, il est nécessaire de disposer dans son bucket MinIO d'un dossier nommé `stage_2a_enl`, avec à l'intérieur la base de sondage simulée nommée `donnees_brut.parquet`.
+> Le projet est configuré de sorte qu'il soit utilisé sur une plateforme Onyxia (datalab ou LS3). En particulier, avant tout lancement de programme, il est nécessaire de disposer dans son bucket MinIO d'un dossier nommé `stage_2a_enl`, avec à l'intérieur la base de sondage simulée nommée `donnees_brut.parquet` (si vous ne la possédez pas, vous pouvez m'en faire la demande).
 >
 > bucket/  
 > └── stage_2a_enl/  
