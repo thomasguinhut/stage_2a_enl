@@ -81,7 +81,7 @@ git clone https://github.com/thomasguinhut/stage_2a_enl
 
 ### 📋 Indications
 
-Le dossier R ne contient que des fonctions importées ensuite dans l'environnement R Studio en lancant le script **`0-installation.R`**. Après avoir ajouter les paramètres avec **`1-parametrage.R`**, toutes ces fonctions sont appelées dans **`2-main.R`** et il n'est pas nécessaire d'aller dans le dossier R, si ce n'est pour modifier une fonction.
+Le dossier R ne contient que des fonctions qui sont importées dans l'environnement R Studio en lancant le script **`0-installation.R`**. Après avoir ajouté les paramètres des simulations avec **`1-parametrage.R`**, toutes ces fonctions sont appelées dans **`2-main.R`** et il n'est pas nécessaire d'aller dans le dossier R, si ce n'est pour modifier une fonction.
 
 En particulier, les fonctons du sous-dossier C sont appelées dans la rubrique "Test" de **`2-main.R`**. La rubrique suivante permet de généraliser à n simulations avec la fonction **`boucles_simulations`**.
 
