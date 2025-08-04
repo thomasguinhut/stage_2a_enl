@@ -47,7 +47,7 @@ Pour simplifier la modélisation, le multimode porte ici sur la collecte par int
 >
 > bucket/  
 > └── stage_2a_enl/  
-> &nbsp;&nbsp;&nbsp;&nbsp;└── donnees_brut.parquet
+>     └── donnees_brut.parquet
 
 ### 📋 Installation, configuration et utilisation du projet
 
