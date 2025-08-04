@@ -74,7 +74,7 @@ git clone https://github.com/thomasguinhut/stage_2a_enl
 | **B** | 📊 Fonctions de tirage d'échantillons, de traitement de la non-réponse et d'estimations (classiques et par combinaison des deux échantillons) |
 | **C** | 🧪 Application des fonctions importées en B pour un seul tirage. Ces scripts ont pour but de voir si tout marche bien, le code pour faire n simulations étant directement écrit dans main.R avec la fonction boucles_simulations |
 
-### Indications
+### 📋 Indications
 
 Le dossier R ne contient que des fonctions importées ensuite dans l'environnement R Studio en lancant le script **`0-installation.R`**. Après avoir ajouter les paramètres avec **`1-parametrage.R`**, toutes ces fonctions sont appelées dans **`2-main.R`** et il n'est pas nécessaire d'aller dans le dossier R, si ce n'est pour modifier une fonction.
 
