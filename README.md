@@ -81,4 +81,4 @@ En particulier, les fonctons du sous-dossier C sont appelées dans la rubrique "
 
 ------------------------------------------------------------------------
 
-*Ce projet s'appuie en très grande partie sur les travaux antérieurs de Khaled Larbi, notamment pour la constitution de la base de sondage simulée et l'implémentation des fonctions de base de tirage d'échantillons et de correction de la non-réponse. Je le remercie pour la partage de ses travaux et son investissement durant ces trois mois qui m'ont permis d'approfondir considérablement mon sujet de stage.*
+*Ce projet s'appuie en très grande partie sur les travaux antérieurs de Khaled Larbi, notamment pour la constitution de la base de sondage simulée et l'implémentation des fonctions de base de tirage d'échantillons et de correction de la non-réponse. Je le remercie pour la partage de ses travaux et son investissement durant ces trois mois, qui m'ont permis d'approfondir considérablement mon sujet de stage.*
