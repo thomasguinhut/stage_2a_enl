@@ -7,6 +7,8 @@
 > 📅 **Période** : 19 mai – 1er août 2025  
 > 🏢 **Lieu** : Division Sondages (DMCSI, Insee)
 
+Un diaporama de présentation des résultats du stage est disponible en description de ce projet. 
+
 ------------------------------------------------------------------------
 
 ## 🎯 Objectifs du stage
@@ -23,7 +25,6 @@ Chaque estimateur est testé selon **3 méthodes de correction de la non-répons
 - Non-réponse corrigée avec les vraies probabilités de réponse
 - Non-réponse corrigée avec une estimation des probabilités de réponse
 - Non-réponse corrigée avec des groupes homogènes de réponse (GRH), construits à partir des estimations de probabilités de réponse
-*Les estimateurs sont également analysés lorsqu'il n'y a pas de non-réponse.*
 
 Différents scénarios de non-réponse peuvent être testés selon l'endogénéité de la réponse pour chaque mode, c'est-à-dire selon sa corrélation avec les variables d'intérêt :
 
@@ -33,6 +34,8 @@ Différents scénarios de non-réponse peuvent être testés selon l'endogénéi
 |    2     |         ❌         |        ✅ ✅         |
 |    3     |         ✅         |        ✅ ✅         |
 |    4     |       ✅ ✅        |        ✅ ✅         |
+
+Les estimateurs sont également analysés lorsqu'il n'y a pas de non-réponse.
 
 ### 🔍 Contexte ENL
 
@@ -46,12 +49,14 @@ Pour simplifier la modélisation, le multimode porte ici sur la collecte par int
 
 ## 🚀 Utilisation du dépôt
 
-> ⚠️ **Prérequis important**\
-> Le projet est configuré de sorte qu'il soit utilisé sur une plateforme Onyxia (datalab ou LS3). En particulier, avant tout lancement de programme, il est nécessaire de disposer dans son bucket MinIO d'un dossier nommé `stage_2a_enl`, avec à l'intérieur la base de sondage simulée nommée `donnees_brut.parquet` (si vous ne la possédez pas, vous pouvez m'en faire la demande).
+> ⚠️ **Prérequis important**
+> Le projet est configuré de sorte qu'il soit utilisé sur une plateforme datalab Onyxia (SSPCloud ou LS3). En particulier, avant tout lancement de programme, il est nécessaire de disposer dans son bucket MinIO d'un dossier nommé `stage_2a_enl`, avec à l'intérieur la base de sondage simulée nommée `donnees_brut.parquet` (si vous ne la possédez pas, vous pouvez m'en faire la demande).
 >
-> bucket/  
-> └── stage_2a_enl/  
+> ```plaintext
+> bucket/
+> └── stage_2a_enl/
 >     └── donnees_brut.parquet
+> ```
 
 ### 📋 Installation, configuration et utilisation du projet
 
@@ -80,7 +85,7 @@ git clone https://github.com/thomasguinhut/stage_2a_enl
 
 ### 📋 Indications
 
-Le dossier R ne contient que des fonctions importées ensuite dans l'environnement R Studio en lancant le script **`0-installation.R`**. Après avoir ajouter les paramètres avec **`1-parametrage.R`**, toutes ces fonctions sont appelées dans **`2-main.R`** et il n'est pas nécessaire d'aller dans le dossier R, si ce n'est pour modifier une fonction.
+Le dossier R ne contient que des fonctions qui sont importées dans l'environnement R Studio en lancant le script **`0-installation.R`**. Après avoir ajouté les paramètres des simulations avec **`1-parametrage.R`**, toutes ces fonctions sont appelées dans **`2-main.R`** et il n'est pas nécessaire d'aller dans le dossier R, si ce n'est pour modifier une fonction.
 
 En particulier, les fonctons du sous-dossier C sont appelées dans la rubrique "Test" de **`2-main.R`**. La rubrique suivante permet de généraliser à n simulations avec la fonction **`boucles_simulations`**.
 
