@@ -45,16 +45,14 @@ Pour simplifier la modélisation, le multimode porte ici sur la collecte par int
 > ⚠️ **Prérequis important**\
 > Le projet est configuré de sorte qu'il soit utilisé sur une plateforme Onyxia (datalab ou LS3). En particulier, avant tout lancement de programme, il est nécessaire de disposer dans son bucket MinIO d'un dossier nommé `stage_2a_enl`, avec à l'intérieur la base de sondage simulée nommée `donnees_brut.parquet`.
 >
-> ```         
 > bucket/
 > └── stage_2a_enl/
 >     └── donnees_brut.parquet
-> ```
 
 ### 📋 Installation, configuration et utilisation du projet
 
 -   [ ] **Étape 1** : Cloner le dépôt Git, ou coller le lien dans les paramètres d'un nouveau service Onyxia
-        ```  
+        ```bash
         git clone https://github.com/thomasguinhut/stage_2a_enl
         ```  
 -   [ ] **Étape 2** : Ouvrir le projet R Studio `stage_2a_enl` dans le dossier du même nom qui a été importé
