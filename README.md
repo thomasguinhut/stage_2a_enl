@@ -18,7 +18,7 @@ Au total, **10 estimateurs** applicables à l'ENL ont été identifiés. Ils son
 Chaque estimateur est testé selon **3 méthodes de correction de la non-réponse** :
 - Non-réponse corrigée avec les vraies probabilités de réponse
 - Non-réponse corrigée avec une estimation des probabilités de réponse
-- Non-réponse corrigée avec des groupes homogènes de réponse (GRH), construits à partir des estimations de probabilités de réponse
+- Non-réponse corrigée avec des groupes homogènes de réponse (GRH), construits à partir des estimations de probabilités de réponse  
 *Les estimateurs sont également analysés lorsqu'il n'y a pas de non-réponse.*
 
 Différents scénarios de non-réponse peuvent être testés selon l'endogénéité de la réponse pour chaque mode, c'est-à-dire selon sa corrélation avec les variables d'intérêt :
