@@ -1,4 +1,4 @@
-# Y a-t-il un intérêt à combiner deux échantillons issus d’une même enquête par sondage, mais tirés différemment ?
+# Y a-t-il un intérêt à combiner des échantillons issus d’une même enquête par sondage, mais tirés différemment ?
 
 > **Stage réalisé par Thomas Guinhut, élève de deuxième année à l'Ensai**\
 > 📅 *19 mai - 1er août 2025, division Sondages (DMCSI)*
