@@ -43,7 +43,7 @@ Pour simplifier la modélisation, le multimode porte ici sur la collecte par int
 ## 🚀 Utilisation du dépôt
 
 > ⚠️ **Prérequis important**\
-> Le projet est configuré de sorte qu'il soit utilisé sur une plateforme Onyxia (datalab ou LS3). En particulier, avant tout lancement de programme, il est nécessaire de disposer dans son bucket MinIO d'un dossier nommé `stage_2a_enl`, avec à l'intérieur la base de sondage simulée nommée `donnees_brut.parquet`.
+> Le projet est configuré de sorte qu'il soit utilisé sur une plateforme datalab Onyxia (SSPCloud ou LS3). En particulier, avant tout lancement de programme, il est nécessaire de disposer dans son bucket MinIO d'un dossier nommé `stage_2a_enl`, avec à l'intérieur la base de sondage simulée nommée `donnees_brut.parquet`.
 >
 > bucket/  
 > └── stage_2a_enl/  
