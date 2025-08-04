@@ -3,6 +3,8 @@
 > **Stage réalisé par Thomas Guinhut, élève de deuxième année à l'Ensai**\
 > 📅 *19 mai - 1er août 2025, division Sondages (DMCSI)*
 
+Un diaporama de présentation des résultats du stage est disponible en description de ce projet. 
+
 ------------------------------------------------------------------------
 
 ## 🎯 Objectifs du stage
