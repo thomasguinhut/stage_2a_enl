@@ -1,4 +1,4 @@
-# 📊 Stage 2A ENL - Combinaison d'échantillons par simulations Monte-Carlo
+# Y a-t-il un intérêt à combiner deux échantillons issus d’une même enquête par sondage, mais tirés différemment ?
 
 > **Stage réalisé par Thomas Guinhut, élève de deuxième année à l'Ensai**\
 > 📅 *19 mai - 1er août 2025, division Sondages (DMCSI)*
@@ -21,7 +21,7 @@ Chaque estimateur est testé selon **3 méthodes de correction de la non-répons
 - Non-réponse corrigée avec des groupes homogènes de réponse (GRH), construits à partir des estimations de probabilités de réponse
 *Les estimateurs sont également analysés lorsqu'il n'y a pas de non-réponse.*
 
-ifférents scénarios de non-réponse peuvent être testés selon l'endogénéité de la réponse pour chaque mode, c'est-à-dire selon sa corrélation avec les variables d'intérêt :
+Différents scénarios de non-réponse peuvent être testés selon l'endogénéité de la réponse pour chaque mode, c'est-à-dire selon sa corrélation avec les variables d'intérêt :
 
 | Scénario | Endogénéité totale | Endogénéité internet |
 |:--------:|:------------------:|:--------------------:|
