@@ -31,7 +31,7 @@ resultats <- boucles_simulations(
   grh = grh,
   taux_min_grh = taux_min_grh,
   parallel = TRUE,
-  n_cores = 14
+  n_cores = 12
 )
 
 

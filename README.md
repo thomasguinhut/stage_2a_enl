@@ -24,6 +24,8 @@ Dans le cas de l'ENL, il est possible de se ramener à deux échantillons (un pr
 
 > ⚠️ **Attention :** Le projet est configuré de sorte qu'il soit utilisé sur une plateforme Onyxia (datalab ou LS3). En particulier, il est nécéssaire de disposer dans son bucket MinIO d'un dossier nommé "stage_2a_enl", avec à l'intérieur la base de sondage simulée nommée "donnees_brut.parquet".
 
+-   [ ] Cloner le dépôt Git, ou coller le lien dans les paramètres d'un nouveau service Onyxia.
+-   [ ] Ouvrir le projet R Studio "stage_2a_enl" dans le dossier du même nom qui a été importé.
 -   [ ] Ouvrir et lancer l'intégralité du script **0-installation.R** (**Ctrl+A**, puis **Ctrl+Entrée**) pour charger les packages, les données et les fonctions. Ce script charge également un nouveau thème pour R Studio ; pour désactiver cette option, mettez la deuxième ligne de ce scrit en commentaire.
 -   [ ] Ouvrir et lancer l'intégralité du script **1-parametrage.R** (**Ctrl+A**, puis **Ctrl+Entrée**) pour charger les variables d'environnement nécessaires au lancement des simulations et à l'exportation des graphiques et tableaux.
 -   [ ] Ouvrir et lancer pas à pas les différentes lignes du script **2-main.R** pour, au choix, faire un test des fonctions sur un seul échantillon, ou lancer un grand nombre de simulations et exporter les résultats dans MinIO.
