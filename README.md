@@ -54,6 +54,9 @@ Pour simplifier la modélisation, le multimode porte ici sur la collecte par int
 ### 📋 Installation, configuration et utilisation du projet
 
 -   [ ] **Étape 1** : Cloner le dépôt Git, ou coller le lien dans les paramètres d'un nouveau service Onyxia
+        ```  
+        git clone https://github.com/thomasguinhut/stage_2a_enl
+        ```  
 -   [ ] **Étape 2** : Ouvrir le projet R Studio `stage_2a_enl` dans le dossier du même nom qui a été importé
 -   [ ] **Étape 3** : Ouvrir et lancer l'intégralité du script **`0-installation.R`** (**Ctrl+A**, puis **Ctrl+Entrée**) pour charger les packages, les données et les fonctions
 -   [ ] **Étape 4** : Ouvrir et lancer l'intégralité du script **`1-parametrage.R`** (**Ctrl+A**, puis **Ctrl+Entrée**) pour charger les variables d'environnement nécessaires au lancement des simulations et à l'exportation des graphiques et tableaux
