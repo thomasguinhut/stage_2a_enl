@@ -9,10 +9,9 @@ if (!(exists("bdd"))) {
   bdd_1 <- arrow::open_dataset(
     sources = "s3://thomasguinhut/stage_2a_enl/donnees_brut.parquet",
     format = "parquet",
-    filesystem = "s3",
-    uri = NULL
+    filesystem = "s3"
   )
-
+  
   bdd_2 <- bdd_1 %>%
     select(!starts_with("z"))
 
