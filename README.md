@@ -31,9 +31,9 @@ Différents scénarios de non-réponse peuvent être testés selon l'endogénéi
 | Scénario | Endogénéité totale | Endogénéité internet |
 |:--------:|:------------------:|:--------------------:|
 |    1     |         ❌         |          ❌          |
-|    2     |         ❌         |        ✅ ✅         |
-|    3     |         ✅         |        ✅ ✅         |
-|    4     |       ✅ ✅        |        ✅ ✅         |
+|    2     |         ❌         |        ✅            |
+|    3     |        ✅ ✅       |        ✅ ✅          |
+|    4     |       ✅ ✅ ✅      |        ✅ ✅ ✅       |
 
 Les estimateurs sont également analysés lorsqu'il n'y a pas de non-réponse.
 
