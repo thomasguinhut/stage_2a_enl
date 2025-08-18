@@ -37,14 +37,14 @@ resultats <- boucles_simulations(
 
 # ---------------------- IMPORTS / EXPORTS -------------------------------------
 
-nom_dossier <- "test"
-num_dossier <- "0"
+nom_dossier <- "scenario_4"
+num_dossier <- "4"
 
 # Créer le dossier s’il n’existe pas
 chemin_dossier <- paste0("stage_2a_enl/exports/", num_dossier, "-", nom_dossier)
 
 # Sauvegarde
-export_resultats(resultats, num_dossier, chemin_dossier, nom_dossier)
+# export_resultats(resultats, num_dossier, chemin_dossier, nom_dossier)
 
 # Réimportation des résultats dans l'environnement de travail
 lire_resultats(num_dossier, nom_dossier, chemin_dossier, scenarios_nr, nom_methodes, prefix_var_interet, nb_sim)
@@ -65,8 +65,8 @@ for (sc in scenarios_nr) {
   # Graphiques et tableau
   tableau_resultats(obj_brut, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D)
   graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D, "boxplots")
-  graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D, "biais")
-  graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D, "eqm")
+  graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D, "biais", xmax_biais = 9)
+  graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D, "eqm", xmax_eqm = 9)
   taux_rep_grh(obj_taux, nb_sim, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D)
   comparaisons_coef_hartley(obj_biais, n_multi, n_mono)
 
@@ -80,3 +80,4 @@ for (sc in scenarios_nr) {
   unlink("R/D-exports", recursive = TRUE, force = TRUE)
   
 }
+  

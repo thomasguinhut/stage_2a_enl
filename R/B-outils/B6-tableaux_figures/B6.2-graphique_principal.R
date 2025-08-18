@@ -50,12 +50,12 @@ graphique_principal <- function(df, nb_sim, nom_methodes, nom_dossier, num_dossi
       
       ensemble = case_when(
         ensemble == "total"    ~ "France ",
-        ensemble == "strate_A" ~ "Hors Île-de-France ",
-        ensemble == "strate_B" ~ "Île-de-France",
+        ensemble == "strate_A" ~ "Hors Île-de-France",
+        ensemble == "strate_B" ~ "Île-de-France ",
         TRUE                   ~ as.character(ensemble)
       ),
       
-      ensemble = factor(ensemble, levels = c("France ", "Hors Île-de-France ", "Île-de-France"))
+      ensemble = factor(ensemble, levels = c("France ", "Île-de-France ", "Hors Île-de-France"))
     )
   
   noms_estimateurs <- c(
@@ -64,16 +64,16 @@ graphique_principal <- function(df, nb_sim, nom_methodes, nom_dossier, num_dossi
     "Par expansion sur multimode",
     "Par expansion sur monomode",
     "Poids relatif échantillons (1a)",
-    "Poids relatif répondants (1aprime)",
+    "Poids relatif répondants (1a prime)",
     "Partage de poids (1b)",
     "1a post-stratifié (2a)",
-    "1aprime post-stratifié (2aprime)",
+    "1aprime post-stratifié (2a prime)",
     "Bankier avec indépendance (3)",
-    "Bankier sans indépendance (3prime)",
+    "Bankier sans indépendance (3 prime)",
     "Bankier avec ind. CNR après (3a)",
-    "Bankier sans ind. CNR ap. (3aprime)",
+    "Bankier sans ind. CNR ap. (3a prime)",
     "Bankier avec ind. CNR avant (3b)",
-    "Bankier sans ind. CNR av. (3bprime)",
+    "Bankier sans ind. CNR av. (3b prime)",
     "Elliott et Davis (4)"
   )
   
@@ -97,37 +97,23 @@ graphique_principal <- function(df, nb_sim, nom_methodes, nom_dossier, num_dossi
                                   `4`                 = noms_estimateurs[16]
   )
   
+  # AJOUTEZ cette ligne pour définir l'ordre des facteurs :
+  data_clean$estimateur <- factor(data_clean$estimateur, levels = noms_estimateurs)
+  
   # Filtrage spécifique pour le graphique EQM et ajustement des levels
-  if (type_graphique == "eqm" && any(c("3a", "3b") %in% nom_methodes)) {
+  if (type_graphique == "eqm" && sc == "1") {
     estimateurs_a_exclure <- c(
-      "Bankier avec indépendance des tirages (3)",
-      "Bankier avec indépendance et CNR après (3a)",
-      "Bankier avec indépendance et CNR avant (3b)"
+      "Bankier avec indépendance (3)",
+      "Bankier avec ind. CNR après (3a)",
+      "Bankier avec ind. CNR avant (3b)",
+      "Elliott et Davis (4)"
     )
-    
-    # Ajouter Elliott et Davis (4) si condition remplie
-    if ("4" %in% nom_methodes && sc != "2") {
-      estimateurs_a_exclure <- c(estimateurs_a_exclure, "Elliott et Davis (4)")
-    }
-    
     data_clean <- data_clean %>%
       filter(!estimateur %in% estimateurs_a_exclure)
-    
-    # Ajuster les levels pour ne garder que ceux présents dans les données, dans le bon ordre
-    noms_estimateurs_filtres <- noms_estimateurs[!noms_estimateurs %in% estimateurs_a_exclure]
-    data_clean$estimateur <- factor(data_clean$estimateur, levels = noms_estimateurs_filtres)
-  } else {
-    # Condition séparée pour Elliott et Davis (4) quand la première condition n'est pas remplie
-    if (type_graphique == "eqm" && "4" %in% nom_methodes && sc != "2") {
-      data_clean <- data_clean %>%
-        filter(estimateur != "Elliott et Davis (4)")
-      
-      noms_estimateurs_filtres <- noms_estimateurs[noms_estimateurs != "Elliott et Davis (4)"]
-      data_clean$estimateur <- factor(data_clean$estimateur, levels = noms_estimateurs_filtres)
-    } else {
-      # Facteur ordonné avec tous les estimateurs
-      data_clean$estimateur <- factor(data_clean$estimateur, levels = noms_estimateurs)
-    }
+    data_clean$estimateur <- factor(
+      data_clean$estimateur,
+      levels = noms_estimateurs[!noms_estimateurs %in% estimateurs_a_exclure]
+    )
   }
   
   # Choix variable et label selon type_graphique
@@ -246,10 +232,10 @@ graphique_principal <- function(df, nb_sim, nom_methodes, nom_dossier, num_dossi
       scale_fill_manual(
         values = c(
           "France " = "#5D6D7E",
-          "Hors Île-de-France " = "#A9DFBF",
-          "Île-de-France" = "#E74C3C"
+          "Île-de-France " = "#E74C3C",
+          "Hors Île-de-France" = "#1E8449"
         ),
-        breaks = c("France ", "Hors Île-de-France ", "Île-de-France"),
+        breaks = c("France ", "Île-de-France ", "Hors Île-de-France"),
         guide = guide_legend(reverse = FALSE)
       ) +
       theme(
@@ -323,7 +309,21 @@ graphique_principal <- function(df, nb_sim, nom_methodes, nom_dossier, num_dossi
     
   } else if (type_graphique == "eqm") {
     
-    # Page 2 uniquement
+    # Complet
+    p_all <- create_plot(data_clean)
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/4-eqm-complet_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/4-eqm-complet_", nom_dossier, "_scenario_", sc, ".pdf")
+    ggsave(nom_fichier_D, plot = p_all, width = 11, height = 15.5, device = cairo_pdf)
+    system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+    
+    # Page 1
+    p_page1 <- create_plot(filter(data_clean, methode_label %in% methode_labels[c("sans_nr", "cnr_exacte")]))
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/4-eqm-page1_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/4-eqm-page1_", nom_dossier, "_scenario_", sc, ".pdf")
+    ggsave(nom_fichier_D, plot = p_page1, width = 13, height = 8, device = cairo_pdf)
+    system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
+    
+    # Page 2
     p_page2 <- create_plot(filter(data_clean, methode_label %in% methode_labels[c("sans_grh", "avec_grh")]))
     nom_fichier_D <- paste0(chemin_sous_dossier_D, "/4-eqm-page2_", nom_dossier, "_scenario_", sc, ".pdf")
     nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/4-eqm-page2_", nom_dossier, "_scenario_", sc, ".pdf")
