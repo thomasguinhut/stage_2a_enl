@@ -127,6 +127,17 @@ def create_latex_table(df, scenario_num=1):
                     csv_estimator = candidate
                     break
 
+            # === Cas spécial : Avec GRH et estimateurs impossibles ===
+            if method == "Avec probas estimées et GRH" and estimator in ["3.a", "3.a'"]:
+                if i == 0:
+                    latex_content.append(
+                        first_row_prefix + r"\multicolumn{6}{c}{\textit{Impossible à implémenter}} \\")
+                else:
+                    latex_content.append(
+                        f"& {estimator} & " + r"\multicolumn{6}{c}{\textit{Impossible à implémenter}} \\")
+                continue
+
+            # === Cas standard : pas trouvé dans le CSV ===
             if csv_estimator is None:
                 zero_cell = r"\textcolor{color1}{0.0}/\textcolor{color2}{0.0}/\textcolor{color3}{0.0}"
                 if i == 0:
@@ -137,6 +148,7 @@ def create_latex_table(df, scenario_num=1):
                         f"& {estimator} & " + " & ".join([zero_cell]*6) + " \\\\")
                 continue
 
+            # === Cas normal : on remplit avec les données ===
             estimator_data = method_data[method_data['estimateur']
                                          == csv_estimator]
             row_values = []
@@ -163,6 +175,7 @@ def create_latex_table(df, scenario_num=1):
                             row['biais_relatif_abs'])
                 br_cell = f"\\textcolor{{color1}}{{{br_values['total']}}}/\\textcolor{{color2}}{{{br_values['strate_B']}}}/\\textcolor{{color3}}{{{br_values['strate_A']}}}"
 
+                # CV(EQM)
                 cv_values = {"total": "0.0",
                              "strate_A": "0.0", "strate_B": "0.0"}
                 for _, row in year_data.iterrows():
