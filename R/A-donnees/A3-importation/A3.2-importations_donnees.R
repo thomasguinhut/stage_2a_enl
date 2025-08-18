@@ -11,11 +11,8 @@ if (!(exists("bdd"))) {
     format = "parquet",
     filesystem = "s3"
   )
-  
-  bdd_2 <- bdd_1 %>%
-    select(!starts_with("z"))
 
-  bdd_3 <- generer_variables_par_strate(bdd_2, c("y_", "x_"))
+  bdd_3 <- generer_variables_par_strate(bdd_1, c("y_", "x_"))
 
   bdd_4 <- bdd_3 %>%
     mutate(recensement = 1)
