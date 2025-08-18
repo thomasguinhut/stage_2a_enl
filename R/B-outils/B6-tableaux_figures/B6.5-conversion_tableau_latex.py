@@ -224,13 +224,7 @@ def main():
         # Générer le tableau LaTeX
         latex_table = create_latex_table(df, scenario_num=1)
 
-        # Sauvegarder dans un fichier
-        output_filename = "tableau_latex_scenario_1.tex"
-        with open(output_filename, 'w', encoding='utf-8') as f:
-            f.write(latex_table)
-
-        print(f"\nTableau LaTeX généré et sauvegardé dans '{output_filename}'")
-        print("\nAperçu du tableau:")
+        print("\nTableau LaTeX généré :\n")
         print(latex_table)
     else:
         print("Impossible de lire le fichier CSV.")
