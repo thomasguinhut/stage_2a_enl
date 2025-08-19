@@ -65,9 +65,9 @@ def create_latex_table(df, scenario_num=1):
         'y_3_': 'Y3'
     }
 
-    estimator_order_default = ['Mono', 'Multi', '1.a', "1.a'",
-                               '1.b', '2.a', "2.a'", '3.a', "3.a'", '3.b', "3.b'", '4']
-    estimator_order_sans_nr = ['Mono', 'Multi',
+    estimator_order_default = ['Multi', 'Mono', '1.a', "1.a'",
+                           '1.b', '2.a', "2.a'", '3.a', "3.a'", '3.b', "3.b'", '4']
+    estimator_order_sans_nr = ['Multi', 'Mono',
                                '1.a', "1.a'", '1.b', '2.a', "2.a'"]
     if has_3_single:
         estimator_order_sans_nr.append('3')

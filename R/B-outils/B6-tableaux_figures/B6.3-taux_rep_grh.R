@@ -9,12 +9,12 @@ taux_rep_grh <- function(df_taux_rep, nb_sim, nom_dossier, num_dossier, sc, chem
   # Ordre de mode : global avant multi avant mono
   niveau_mode <- c("global", "multi", "mono")
   df_taux_rep$mode <- factor(df_taux_rep$mode, levels = niveau_mode)
-  
-  # Couleurs sobres : rouge, bleu, vert
+ 
+  # Couleurs : dégradé de bleu pour global/multi/mono
   couleurs <- c(
-    "global" = "#3B5998",  # rouge brique doux
-    "multi"  = "#B7413E",  # bleu marine doux
-    "mono"   = "#4E7D49"   # vert forêt doux
+    "global" = "#1f4e79",  # bleu moyen (global)
+    "multi"  = "#aec7e8",  # bleu clair (multi)
+    "mono"   = "#1f77b4"   # bleu foncé (mono)
   )
   
   plot <- df_taux_rep %>%
@@ -27,10 +27,11 @@ taux_rep_grh <- function(df_taux_rep, nb_sim, nom_dossier, num_dossier, sc, chem
     ggplot(aes(x = grh, y = mean_taux, fill = mode)) +
     geom_bar(stat = "identity", position = position_dodge()) +
     scale_fill_manual(values = couleurs) +
+    scale_y_continuous(breaks = seq(0, 100, by = 10)) +  # Trait tous les 10 sur l'axe y
     theme_classic() +
     labs(
-      x = paste0("\nGRH communs aux ", nb_sim, " simulations réalisées"),
-      y = paste0("Taux de réponse moyen (%) avec le scénario ", sc, " de NR\n"),
+      x = paste0("\nGRH communs aux 10 000 simulations réalisées"),
+      y = paste0("Taux de réponse moyen (%) avec le scénario ", sc, " de réponse\n"),
       fill = "Échantillon"
     )
   
@@ -38,5 +39,4 @@ taux_rep_grh <- function(df_taux_rep, nb_sim, nom_dossier, num_dossier, sc, chem
   nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/5-taux_rep_grh_scenario_", sc, ".pdf")
   ggsave(nom_fichier_D, plot = plot, width = 8.27, height = 5.83, device = cairo_pdf)
   system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
-  
 }
