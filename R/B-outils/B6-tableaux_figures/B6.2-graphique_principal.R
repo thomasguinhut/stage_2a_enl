@@ -265,22 +265,22 @@ graphique_principal <- function(df, nb_sim, nom_methodes, nom_dossier, num_dossi
     
     # Complet
     p_all <- create_plot(data_clean)
-    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/2-boxplots-complet_", nom_dossier, "_scenario_", sc, ".pdf")
-    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/2-boxplots-complet_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/2-boxplots-complet_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/2-boxplots-complet_scenario_", sc, ".pdf")
     ggsave(nom_fichier_D, plot = p_all, width = 11, height = 15.5, device = cairo_pdf)
     system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
     
     # Page 1
     p_page1 <- create_plot(filter(data_clean, methode_label %in% methode_labels[c("sans_nr", "cnr_exacte")]))
-    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/2-boxplots-page1_", nom_dossier, "_scenario_", sc, ".pdf")
-    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/2-boxplots-page1_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/2-boxplots-page1_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/2-boxplots-page1_scenario_", sc, ".pdf")
     ggsave(nom_fichier_D, plot = p_page1, width = 11, height = 8, device = cairo_pdf)
     system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
     
     # Page 2
     p_page2 <- create_plot(filter(data_clean, methode_label %in% methode_labels[c("sans_grh", "avec_grh")]))
-    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/2-boxplots-page2_", nom_dossier, "_scenario_", sc, ".pdf")
-    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/2-boxplots-page2_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/2-boxplots-page2_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/2-boxplots-page2_scenario_", sc, ".pdf")
     ggsave(nom_fichier_D, plot = p_page2, width = 11, height = 8, device = cairo_pdf)
     system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
     
@@ -288,22 +288,22 @@ graphique_principal <- function(df, nb_sim, nom_methodes, nom_dossier, num_dossi
     
     # Complet
     p_all <- create_plot(data_clean)
-    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/3-biais-complet_", nom_dossier, "_scenario_", sc, ".pdf")
-    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/3-biais-complet_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/3-biais-complet_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/3-biais-complet_scenario_", sc, ".pdf")
     ggsave(nom_fichier_D, plot = p_all, width = 11, height = 15.5, device = cairo_pdf)
     system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
     
     # Page 1
     p_page1 <- create_plot(filter(data_clean, methode_label %in% methode_labels[c("sans_nr", "cnr_exacte")]))
-    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/3-biais-page1_", nom_dossier, "_scenario_", sc, ".pdf")
-    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/3-biais-page1_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/3-biais-page1_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/3-biais-page1_scenario_", sc, ".pdf")
     ggsave(nom_fichier_D, plot = p_page1, width = 13, height = 8, device = cairo_pdf)
     system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
     
     # Page 2
     p_page2 <- create_plot(filter(data_clean, methode_label %in% methode_labels[c("sans_grh", "avec_grh")]))
-    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/3-biais-page2_", nom_dossier, "_scenario_", sc, ".pdf")
-    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/3-biais-page2_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/3-biais-page2_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/3-biais-page2_scenario_", sc, ".pdf")
     ggsave(nom_fichier_D, plot = p_page2, width = 13, height = 8, device = cairo_pdf)
     system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
     
@@ -311,22 +311,22 @@ graphique_principal <- function(df, nb_sim, nom_methodes, nom_dossier, num_dossi
     
     # Complet
     p_all <- create_plot(data_clean)
-    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/4-eqm-complet_", nom_dossier, "_scenario_", sc, ".pdf")
-    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/4-eqm-complet_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/4-eqm-complet_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/4-eqm-complet_scenario_", sc, ".pdf")
     ggsave(nom_fichier_D, plot = p_all, width = 11, height = 15.5, device = cairo_pdf)
     system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
     
     # Page 1
     p_page1 <- create_plot(filter(data_clean, methode_label %in% methode_labels[c("sans_nr", "cnr_exacte")]))
-    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/4-eqm-page1_", nom_dossier, "_scenario_", sc, ".pdf")
-    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/4-eqm-page1_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/4-eqm-page1_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/4-eqm-page1_scenario_", sc, ".pdf")
     ggsave(nom_fichier_D, plot = p_page1, width = 13, height = 8, device = cairo_pdf)
     system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
     
     # Page 2
     p_page2 <- create_plot(filter(data_clean, methode_label %in% methode_labels[c("sans_grh", "avec_grh")]))
-    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/4-eqm-page2_", nom_dossier, "_scenario_", sc, ".pdf")
-    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/4-eqm-page2_", nom_dossier, "_scenario_", sc, ".pdf")
+    nom_fichier_D <- paste0(chemin_sous_dossier_D, "/4-eqm-page2_scenario_", sc, ".pdf")
+    nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/4-eqm-page2_scenario_", sc, ".pdf")
     ggsave(nom_fichier_D, plot = p_page2, width = 13, height = 8, device = cairo_pdf)
     system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)
     

@@ -90,7 +90,7 @@ def create_latex_table(df, scenario_num=1):
         r"\definecolor{color1}{HTML}{5D6D7E}",
         r"\definecolor{color2}{HTML}{E74C3C}",
         r"\definecolor{color3}{HTML}{1E8449}",
-        r"\begin{tabularx}{\textwidth}{@{}cXcccccc@{}}",
+        r"\begin{tabularx}{\textwidth}{@{}cXcc|cc|cc@{}}",
         r"\toprule",
         f"\\multicolumn{{2}}{{c}}{{\\textbf{{Scénario {scenario_num}}}}} & \\multicolumn{{2}}{{c}}{{$Y_1$ (exponentielle)}} & \\multicolumn{{2}}{{c}}{{$Y_2$ (parabolique)}} & \\multicolumn{{2}}{{c}}{{$Y_3$ (normale)}} \\\\",
         r"\cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(l){7-8}",
@@ -128,7 +128,7 @@ def create_latex_table(df, scenario_num=1):
                     break
 
             # === Cas spécial : Avec GRH et estimateurs impossibles ===
-            if method == "Avec probas estimées et GRH" and estimator in ["3.a", "3.a'"]:
+            if method == "Avec probas estimées puis GRH" and estimator in ["3.a", "3.a'"]:
                 if i == 0:
                     latex_content.append(
                         first_row_prefix + r"\multicolumn{6}{c}{\textit{Impossible à implémenter}} \\")

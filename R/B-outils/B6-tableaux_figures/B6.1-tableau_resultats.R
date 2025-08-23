@@ -24,8 +24,8 @@ tableau_resultats <- function(brut, nom_dossier, num_dossier, sc, chemin_sous_do
            cv = round(sqrt(variance) / esperance * 100, 10),
            cv_reqm = round(reqm / esperance * 100, 10))
   
-  nom_fichier_D <- paste0(chemin_sous_dossier_D, "/1-tableau_resultats_", nom_dossier, "_scenario_", sc, ".csv")
-  nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/1-tableau_resultats_", nom_dossier, "_scenario_", sc, ".csv")
+  nom_fichier_D <- paste0(chemin_sous_dossier_D, "/1-tableau_resultats_scenario_", sc, ".csv")
+  nom_fichier_aws <- paste0(chemin_sous_dossier_aws, "/1-tableau_resultats_scenario_", sc, ".csv")
   write.csv(tableau, nom_fichier_D)
   
   system(paste0("mc cp ", nom_fichier_D, " ", nom_fichier_aws), intern = FALSE, ignore.stdout = TRUE, ignore.stderr = TRUE)

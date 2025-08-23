@@ -12,9 +12,9 @@ taux_rep_grh <- function(df_taux_rep, nb_sim, nom_dossier, num_dossier, sc, chem
  
   # Couleurs : dégradé de bleu pour global/multi/mono
   couleurs <- c(
-    "global" = "#1f4e79",  # bleu moyen (global)
-    "multi"  = "#aec7e8",  # bleu clair (multi)
-    "mono"   = "#1f77b4"   # bleu foncé (mono)
+    "global" = "#193e61",  # bleu moyen (global)
+    "multi"  = "#7FB3D3",  # bleu clair (multi)
+    "mono"   = "#195f90"   # bleu foncé (mono)
   )
   
   plot <- df_taux_rep %>%
