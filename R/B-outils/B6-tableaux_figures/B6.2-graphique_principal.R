@@ -6,7 +6,7 @@ graphique_principal <- function(df, nb_sim, nom_methodes, nom_dossier, num_dossi
     data_to_use <- df %>% 
       filter(is.na(scenario_nr) | scenario_nr == sc)
   } else if (type_graphique %in% c("biais", "eqm")) {
-    data_to_use <- read.csv(paste0(chemin_sous_dossier_D, "/1-tableau_resultats_", nom_dossier, "_scenario_", sc, ".csv"))
+    data_to_use <- read.csv(paste0(chemin_sous_dossier_D, "/1-tableau_resultats_scenario_", sc, ".csv"))
   } else {
     stop("type_graphique doit être 'boxplots', 'biais' ou 'eqm'")
   }
@@ -37,12 +37,12 @@ graphique_principal <- function(df, nb_sim, nom_methodes, nom_dossier, num_dossi
       
       y = recode_factor(
         y,
-        "y_1_" = "Variable y_1<br><span style='font-size:10pt'>(distribution exponentielle)</span>",
-        "y_2_" = "Variable y_2<br><span style='font-size:10pt'>(distribution parabolique de forme U)</span>",
-        "y_3_" = "Variable y_3<br><span style='font-size:10pt'>(distribution gaussienne)</span>",
-        "y_1" = "Variable y_1<br><span style='font-size:10pt'>(distribution exponentielle)</span>",
-        "y_2" = "Variable y_2<br><span style='font-size:10pt'>(distribution parabolique de forme U)</span>",
-        "y_3" = "Variable y_3<br><span style='font-size:10pt'>(distribution gaussienne)</span>",
+        "y_1_" = "Variable <i>Y</i><sub>1</sub><br><span style='font-size:10pt'>(distribution exponentielle)</span>",
+        "y_2_" = "Variable <i>Y</i><sub>2</sub><br><span style='font-size:10pt'>(distribution parabolique de forme U)</span>",
+        "y_3_" = "Variable <i>Y</i><sub>3</sub><br><span style='font-size:10pt'>(distribution gaussienne)</span>",
+        "y_1" = "Variable <i>Y</i><sub>1</sub><br><span style='font-size:10pt'>(distribution exponentielle)</span>",
+        "y_2" = "Variable <i>Y</i><sub>2</sub><br><span style='font-size:10pt'>(distribution parabolique de forme U)</span>",
+        "y_3" = "Variable <i>Y</i><sub>3</sub><br><span style='font-size:10pt'>(distribution gaussienne)</span>",
         .ordered = TRUE
       ),
       
