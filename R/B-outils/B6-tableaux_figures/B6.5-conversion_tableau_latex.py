@@ -1,11 +1,13 @@
 import pandas as pd
 import numpy as np
 
+# Constante pour le numéro de scénario
+SCENARIO_NUM = 4
+
 
 def read_csv_file(filepath):
     """Lit le fichier CSV et le traite"""
     try:
-        # Lire le fichier CSV avec pandas
         df = pd.read_csv(filepath, sep=';')
         return df
     except Exception as e:
@@ -17,16 +19,14 @@ def format_value(value):
     """Formate une valeur avec une décimale, en évitant -0.0"""
     if pd.isna(value):
         return "0.0"
-
     rounded_val = round(float(value), 1)
     if rounded_val == -0.0:
         rounded_val = 0.0
-    return f"{rounded_val:.1f}"
+    return f"{rounded_val:.1f}".replace('.', ',')
 
 
-def create_latex_table(df, scenario_num=1):
+def create_latex_table(df, scenario_num=SCENARIO_NUM):
     """Crée le tableau LaTeX à partir du DataFrame avec des couleurs pour les valeurs"""
-    # Mapping de base des noms LaTeX vers les alias CSV
     estimator_mapping = {
         'Mono': ['monomode_expansion', 'HT_mono'],
         'Multi': ['multimode_expansion', 'HT_multi'],
@@ -42,7 +42,6 @@ def create_latex_table(df, scenario_num=1):
         '4': ['4']
     }
 
-    # Mapping spécial pour "Sans non-réponse" si 3 et 3prime existent
     unique_estimators = df['estimateur'].unique()
     has_3_single = '3' in unique_estimators
     has_3prime_single = '3prime' in unique_estimators
@@ -56,7 +55,7 @@ def create_latex_table(df, scenario_num=1):
         'sans_nr': 'Sans non-réponse',
         'cnr_exacte': 'Avec probas de réponse exactes',
         'sans_grh': 'Avec probas de réponse estimées',
-        'avec_grh': 'Avec probas estimées et GRH'
+        'avec_grh': 'Avec probas estimées puis GRH'
     }
 
     year_mapping = {
@@ -66,7 +65,7 @@ def create_latex_table(df, scenario_num=1):
     }
 
     estimator_order_default = ['Multi', 'Mono', '1.a', "1.a'",
-                           '1.b', '2.a', "2.a'", '3.a', "3.a'", '3.b', "3.b'", '4']
+                               '1.b', '2.a', "2.a'", '3.a', "3.a'", '3.b', "3.b'", '4']
     estimator_order_sans_nr = ['Multi', 'Mono',
                                '1.a', "1.a'", '1.b', '2.a', "2.a'"]
     if has_3_single:
@@ -80,10 +79,9 @@ def create_latex_table(df, scenario_num=1):
     estimator_order_sans_nr.append('4')
 
     method_order = ['Sans non-réponse', 'Avec probas de réponse exactes',
-                    'Avec probas de réponse estimées', 'Avec probas estimées et GRH']
+                    'Avec probas de réponse estimées', 'Avec probas estimées puis GRH']
     year_order = ['Y1', 'Y2', 'Y3']
 
-    # Début du tableau LaTeX
     latex_content = [
         r"\begin{table}[H]",
         r"\vspace{-0.4cm}",
@@ -99,7 +97,6 @@ def create_latex_table(df, scenario_num=1):
     ]
 
     for method in method_order:
-        # Correspondance CSV
         csv_method = None
         for k, v in method_mapping.items():
             if v == method:
@@ -108,36 +105,31 @@ def create_latex_table(df, scenario_num=1):
         if csv_method is None:
             continue
         method_data = df[df['methode'] == csv_method]
-
         if method == 'Sans non-réponse':
             current_estimator_mapping = estimator_mapping_sans_nr
             current_estimator_order = estimator_order_sans_nr
         else:
             current_estimator_mapping = estimator_mapping
             current_estimator_order = estimator_order_default
-
         num_estimators = len(current_estimator_order)
         first_row_prefix = f"\\multirow{{{num_estimators}}}{{*}}{{\\rotatebox{{90}}{{\\centering {method}}}}} & {current_estimator_order[0]} & "
 
         for i, estimator in enumerate(current_estimator_order):
-            # Chercher l'estimateur réel dans le CSV
             csv_estimator = None
             for candidate in current_estimator_mapping[estimator]:
                 if candidate in method_data['estimateur'].values:
                     csv_estimator = candidate
                     break
 
-            # === Cas spécial : Avec GRH et estimateurs impossibles ===
             if method == "Avec probas estimées puis GRH" and estimator in ["3.a", "3.a'"]:
                 if i == 0:
                     latex_content.append(
-                        first_row_prefix + r"\multicolumn{6}{c}{\textit{Impossible à implémenter}} \\")
+                        first_row_prefix + r"\multicolumn{6}{c}{\textit{Irréalisable}} \\")
                 else:
                     latex_content.append(
-                        f"& {estimator} & " + r"\multicolumn{6}{c}{\textit{Impossible à implémenter}} \\")
+                        f"& {estimator} & " + r"\multicolumn{6}{c}{\textit{Irréalisable}} \\")
                 continue
 
-            # === Cas standard : pas trouvé dans le CSV ===
             if csv_estimator is None:
                 zero_cell = r"\textcolor{color1}{0.0}/\textcolor{color2}{0.0}/\textcolor{color3}{0.0}"
                 if i == 0:
@@ -148,11 +140,9 @@ def create_latex_table(df, scenario_num=1):
                         f"& {estimator} & " + " & ".join([zero_cell]*6) + " \\\\")
                 continue
 
-            # === Cas normal : on remplit avec les données ===
             estimator_data = method_data[method_data['estimateur']
                                          == csv_estimator]
             row_values = []
-
             for year in year_order:
                 csv_year = None
                 for k, v in year_mapping.items():
@@ -163,10 +153,7 @@ def create_latex_table(df, scenario_num=1):
                     row_values.extend(
                         [r"\textcolor{color1}{0.0}/\textcolor{color2}{0.0}/\textcolor{color3}{0.0}"]*2)
                     continue
-
                 year_data = estimator_data[estimator_data['y'] == csv_year]
-
-                # Biais
                 br_values = {"total": "0.0",
                              "strate_A": "0.0", "strate_B": "0.0"}
                 for _, row in year_data.iterrows():
@@ -174,8 +161,6 @@ def create_latex_table(df, scenario_num=1):
                         br_values[row['ensemble']] = format_value(
                             row['biais_relatif_abs'])
                 br_cell = f"\\textcolor{{color1}}{{{br_values['total']}}}/\\textcolor{{color2}}{{{br_values['strate_B']}}}/\\textcolor{{color3}}{{{br_values['strate_A']}}}"
-
-                # CV(EQM)
                 cv_values = {"total": "0.0",
                              "strate_A": "0.0", "strate_B": "0.0"}
                 for _, row in year_data.iterrows():
@@ -183,7 +168,6 @@ def create_latex_table(df, scenario_num=1):
                         cv_values[row['ensemble']] = format_value(
                             row['cv_reqm'])
                 cv_cell = f"\\textcolor{{color1}}{{{cv_values['total']}}}/\\textcolor{{color2}}{{{cv_values['strate_B']}}}/\\textcolor{{color3}}{{{cv_values['strate_A']}}}"
-
                 row_values.extend([br_cell, cv_cell])
 
             if i == 0:
@@ -199,19 +183,15 @@ def create_latex_table(df, scenario_num=1):
     latex_content.extend([
         r"\bottomrule",
         r"\end{tabularx}",
-        r"\caption{Valeur absolue des biais et coefficients de variation des EQM de chaque estimateur, selon le scénario 3 de réponse (en \%)}",
+        f"""\\caption{{Valeur absolue des biais et coefficients de variation des EQM de chaque estimateur, selon le scénario {scenario_num} de mécanisme de réponse (en \\%) avec \\textcolor{{color1}}{{France entière}}, \\textcolor{{color2}}{{IdF}} et \\textcolor{{color3}}{{hors IdF}}}}""",
         r"\end{table}"
     ])
     return "\n".join(latex_content)
 
 
 def main():
-    # Nom du fichier CSV (ajustez selon votre fichier)
-    csv_filename = "test_4.csv"
-
-    # Lire le fichier CSV
+    csv_filename = "test_3.csv"
     df = read_csv_file(csv_filename)
-
     if df is not None:
         print("Aperçu des données:")
         print(df.head())
@@ -220,10 +200,7 @@ def main():
         print(f"Estimateurs uniques: {df['estimateur'].unique()}")
         print(f"Années uniques: {df['y'].unique()}")
         print(f"Ensembles uniques: {df['ensemble'].unique()}")
-
-        # Générer le tableau LaTeX
-        latex_table = create_latex_table(df, scenario_num=1)
-
+        latex_table = create_latex_table(df)
         print("\nTableau LaTeX généré :\n")
         print(latex_table)
     else:
