@@ -56,7 +56,7 @@ deps <- c(
   "ggplot2", "ggthemes", "ggh4x", "ggtext", "gridExtra", "grid",
   
   # Outils spécifiques
-  "aws.s3"
+  "aws.s3", "GGally"
 )
 
 # -------------------------------------------------------------------
