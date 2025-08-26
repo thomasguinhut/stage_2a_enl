@@ -30,8 +30,7 @@ resultats <- boucles_simulations(
   formule_cnr = formule_cnr,
   grh = grh,
   taux_min_grh = taux_min_grh,
-  parallel = TRUE,
-  n_cores = 12
+  parallel = FALSE # finalement le parallélisme ne parche pas...
 )
 
 
@@ -68,7 +67,7 @@ for (sc in scenarios_nr) {
   graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D, "biais", xmax_biais = 8.5)
   graphique_principal(obj_biais, nb_sim, nom_methodes, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D, "eqm", xmax_eqm = 8.5)
   taux_rep_grh(obj_taux, nb_sim, nom_dossier, num_dossier, sc, chemin_sous_dossier_aws, chemin_sous_dossier_D)
-  # comparaisons_coef_hartley(obj_biais, n_multi, n_mono)
+  comparaisons_coef_hartley(obj_biais, n_multi, n_mono)
 
   # Nettoyage
   rm(obj_biais, obj_brut, obj_taux)
