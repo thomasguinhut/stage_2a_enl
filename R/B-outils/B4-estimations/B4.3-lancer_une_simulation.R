@@ -36,19 +36,16 @@ lancer_une_simulation <- function(i,
     grh = grh,
     taux_min_grh = taux_min_grh
   )
-
   brut <- res_list$resultats %>%
     dplyr::mutate(simulation = i)
-
   if (is.null(res_list$resultats) || nrow(res_list$resultats) == 0) {
     warning(sprintf("Attention : 'resultats' vide ou NULL pour la simulation %d", i))
   }
-
   bdd_avec_tirage_et_cnr <- res_list$bdd_avec_tirage_et_cnr
-
+  
   # Initialisation de la table de sortie
   taux_rep_grh_mode <- data.frame()
-
+  
   # Définition des colonnes spécifiques pour chaque mode
   mode_config <- list(
     mono = list(
@@ -64,24 +61,20 @@ lancer_une_simulation <- function(i,
       tir = "ind_tirage"
     )
   )
-
+  
   # Boucle sur les scénarios
   for (s in scenarios) {
     grh_col <- paste0("grh_groupe_", s)
-
     # Boucle sur les modes
     for (mode_name in names(mode_config)) {
       rep_var <- paste0(mode_config[[mode_name]]$rep, "_", s)
       tir_var <- mode_config[[mode_name]]$tir
-
       # Boucle sur chaque modalité de GRH
       for (g in 1:grh) {
         sous_bdd <- bdd_avec_tirage_et_cnr[bdd_avec_tirage_et_cnr[[grh_col]] == g, ]
         numerateur <- sum(sous_bdd[[rep_var]])
         denominateur <- sum(sous_bdd[[tir_var]])
-
         taux <- ifelse(denominateur > 0, numerateur / denominateur, NA)
-
         df_tmp <- data.frame(
           simulation = i,
           scenario = s,
@@ -89,22 +82,15 @@ lancer_une_simulation <- function(i,
           mode = mode_name,
           taux_rep = round(100 * taux, 2)
         )
-
         taux_rep_grh_mode <- rbind(taux_rep_grh_mode, df_tmp)
       }
     }
   }
-
+  
   # Nettoyage
   rownames(taux_rep_grh_mode) <- NULL
-
-
-
-
   bdd_tire <- bdd_avec_tirage_et_cnr[bdd_avec_tirage_et_cnr$ind_tirage_multimode == 1 | bdd_avec_tirage_et_cnr$ind_tirage_monomode == 1, ]
-
   poids_moyens <- data.frame()
-
   if (nrow(bdd_tire) > 0) {
     # Déterminer le mode de façon vectorielle
     bdd_tire$mode <- ifelse(
@@ -112,13 +98,11 @@ lancer_une_simulation <- function(i,
       "multi_et_mono",
       ifelse(bdd_tire$ind_tirage_multimode == 1, "multi", "mono")
     )
-
     # Créer une liste pour stocker les résultats par scénario
     poids_list <- lapply(scenarios, function(s) {
       poids_cnr_exacte_col <- paste0("poids_cnr_exacte_", s)
       poids_cnr_sans_grh_col <- paste0("poids_cnr_sans_grh_", s)
       poids_cnr_avec_grh_col <- paste0("poids_cnr_avec_grh_", s)
-
       data.frame(
         id_ind = c(1:(n_multi + n_mono)),
         simulation = i,
@@ -129,15 +113,43 @@ lancer_une_simulation <- function(i,
         poids_cnr_avec_grh = if (poids_cnr_avec_grh_col %in% names(bdd_tire)) bdd_tire[[poids_cnr_avec_grh_col]] else NA_real_
       )
     })
-
     poids_cnr <- dplyr::bind_rows(poids_list)
   }
-
-
+  
+  # Calcul des taux de réponse pour chaque scénario et chaque strate
+  taux_reponse_simulation <- list()
+  for (s in scenarios) {
+    rep_var <- paste0("rep_multi_", s)
+    
+    # Taux global
+    taux_global <- sum(bdd_avec_tirage_et_cnr[[rep_var]], na.rm = TRUE) /
+      sum(bdd_avec_tirage_et_cnr$ind_tirage_monomode, na.rm = TRUE)
+    
+    # Taux pour la strate A
+    denominateur_A <- sum(bdd_avec_tirage_et_cnr$ind_tirage_monomode[bdd_avec_tirage_et_cnr$strate_vec == "A"], na.rm = TRUE)
+    taux_A <- ifelse(denominateur_A > 0,
+                     sum(bdd_avec_tirage_et_cnr[[rep_var]][bdd_avec_tirage_et_cnr$strate_vec == "A"], na.rm = TRUE) / denominateur_A,
+                     NA)
+    
+    # Taux pour la strate B
+    denominateur_B <- sum(bdd_avec_tirage_et_cnr$ind_tirage_monomode[bdd_avec_tirage_et_cnr$strate_vec == "B"], na.rm = TRUE)
+    taux_B <- ifelse(denominateur_B > 0,
+                     sum(bdd_avec_tirage_et_cnr[[rep_var]][bdd_avec_tirage_et_cnr$strate_vec == "B"], na.rm = TRUE) / denominateur_B,
+                     NA)
+    
+    # Stocke les taux pour ce scénario
+    taux_reponse_simulation[[paste0("scenario_", s)]] <- list(
+      global = taux_global,
+      A = taux_A,
+      B = taux_B
+    )
+  }
+  
   list(
     brut = brut,
     bdd_avec_tirage_et_cnr = bdd_avec_tirage_et_cnr,
     taux_rep_grh_mode = taux_rep_grh_mode,
-    poids_cnr = poids_cnr
+    poids_cnr = poids_cnr,
+    taux_reponse = taux_reponse_simulation  # Ajoute les taux de réponse
   )
 }
