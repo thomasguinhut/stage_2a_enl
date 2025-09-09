@@ -23,7 +23,6 @@ boucles_simulations <- function(nb_sim,
                                   "R/B-outils/B1-tirage/B1.5-tirage.R"
                                 )) {
   
-  # Fonction pour formater le temps
   format_temps <- function(secs) {
     mins <- floor(secs / 60)
     sec <- round(secs %% 60)
@@ -32,119 +31,84 @@ boucles_simulations <- function(nb_sim,
   
   t0 <- Sys.time()
   
-  # Initialisation des listes pour stocker les résultats
   res <- vector("list", nb_sim)
   taux_reps_grh_mode <- vector("list", nb_sim)
   poids_moyens_cnr <- vector("list", nb_sim)
-  tous_les_taux_reponse <- vector("list", nb_sim)  # Liste pour stocker les taux de réponse de chaque simulation
+  tous_les_taux_reponse <- vector("list", nb_sim)
   
   if (parallel) {
     cl <- parallel::makeCluster(n_cores)
     doParallel::registerDoParallel(cl)
-    
-    # Nettoyage à la fin même en cas d'erreur
-    on.exit({
-      parallel::stopCluster(cl)
-      doParallel::stopImplicitCluster()
-    }, add = TRUE)
-    
-    # Export des objets nécessaires
+    on.exit({ parallel::stopCluster(cl); doParallel::stopImplicitCluster() }, add = TRUE)
     parallel::clusterExport(cl, varlist = c(
       "bdd", "nom_methodes", "n_multi", "n_mono",
       "part_strate_A_dans_mode_1", "part_strate_A_dans_mode_2",
       "scenarios", "prefix_var_interet", "strat_var_name", "sigma",
       "modele_latent", "formule_cnr", "grh", "taux_min_grh", "source_files"
     ), envir = environment())
-    
-    # Chargement des scripts dans les workers
     parallel::clusterEvalQ(cl, {
       data.table::setDTthreads(1)
       for (f in source_files) source(f)
       NULL
     })
     
-    # Exécution parallèle des simulations
     res_sim <- foreach::foreach(i = 1:nb_sim, .packages = c("dplyr", "data.table", "survey", "sampling", "stringr")) %dopar% {
       result <- lancer_une_simulation(
-        i = i,
-        bdd = bdd,
-        nom_methodes = nom_methodes,
-        n_multi = n_multi,
-        n_mono = n_mono,
+        i = i, bdd = bdd, nom_methodes = nom_methodes,
+        n_multi = n_multi, n_mono = n_mono,
         part_strate_A_dans_mode_1 = part_strate_A_dans_mode_1,
         part_strate_A_dans_mode_2 = part_strate_A_dans_mode_2,
-        scenarios = scenarios,
-        prefix_var_interet = prefix_var_interet,
-        strat_var_name = strat_var_name,
-        sigma = sigma,
-        modele_latent = modele_latent,
-        formule_cnr = formule_cnr,
-        grh = grh,
-        taux_min_grh = taux_min_grh
+        scenarios = scenarios, prefix_var_interet = prefix_var_interet,
+        strat_var_name = strat_var_name, sigma = sigma,
+        modele_latent = modele_latent, formule_cnr = formule_cnr,
+        grh = grh, taux_min_grh = taux_min_grh
       )
-      
       list(
         brut = result$brut,
         taux_rep_grh_mode = result$taux_rep_grh_mode,
         poids_cnr = result$poids_cnr,
-        taux_reponse = result$taux_reponse  # Récupère les taux de réponse calculés dans lancer_une_simulation
+        taux_reponse = result$taux_reponse
       )
     }
-    
-    # Récupération des résultats
     for (i in seq_along(res_sim)) {
       res[[i]] <- res_sim[[i]]$brut
       taux_reps_grh_mode[[i]] <- res_sim[[i]]$taux_rep_grh_mode
       poids_moyens_cnr[[i]] <- res_sim[[i]]$poids_cnr
-      tous_les_taux_reponse[[i]] <- res_sim[[i]]$taux_reponse  # Stocke les taux de réponse
+      tous_les_taux_reponse[[i]] <- res_sim[[i]]$taux_reponse
     }
     
   } else {
-    # Exécution séquentielle des simulations
     for (i in seq_len(nb_sim)) {
       cat(sprintf("Simulation %d/%d\n", i, nb_sim))
       result <- lancer_une_simulation(
-        i = i,
-        bdd = bdd,
-        nom_methodes = nom_methodes,
-        n_multi = n_multi,
-        n_mono = n_mono,
+        i = i, bdd = bdd, nom_methodes = nom_methodes,
+        n_multi = n_multi, n_mono = n_mono,
         part_strate_A_dans_mode_1 = part_strate_A_dans_mode_1,
         part_strate_A_dans_mode_2 = part_strate_A_dans_mode_2,
-        scenarios = scenarios,
-        prefix_var_interet = prefix_var_interet,
-        strat_var_name = strat_var_name,
-        sigma = sigma,
-        modele_latent = modele_latent,
-        formule_cnr = formule_cnr,
-        grh = grh,
-        taux_min_grh = taux_min_grh
+        scenarios = scenarios, prefix_var_interet = prefix_var_interet,
+        strat_var_name = strat_var_name, sigma = sigma,
+        modele_latent = modele_latent, formule_cnr = formule_cnr,
+        grh = grh, taux_min_grh = taux_min_grh
       )
       res[[i]] <- result$brut
       taux_reps_grh_mode[[i]] <- result$taux_rep_grh_mode
       poids_moyens_cnr[[i]] <- result$poids_cnr
-      tous_les_taux_reponse[[i]] <- result$taux_reponse  # Stocke les taux de réponse
+      tous_les_taux_reponse[[i]] <- result$taux_reponse
     }
   }
   
-  # Temps total
   t_total <- as.numeric(difftime(Sys.time(), t0, units = "secs"))
   temps_moyen <- t_total / nb_sim
   cat("\n=== RESULTATS ===\n")
   cat(sprintf("Temps total: %s\n", format_temps(t_total)))
   cat(sprintf("Temps moyen par simulation: %s\n", format_temps(temps_moyen)))
   
-  # Résultat brut
   res_final_brut <- dplyr::bind_rows(res) %>%
     dplyr::arrange(
-      desc(is.na(scenario_nr)),
-      scenario_nr,
-      y,
-      ensemble,
+      desc(is.na(scenario_nr)), scenario_nr, y, ensemble,
       desc(is.na(methode)),
       factor(methode, levels = c("sans_nr", "cnr_exacte", "sans_grh", "avec_grh")),
-      estimateur,
-      simulation
+      estimateur, simulation
     ) %>%
     dplyr::filter(
       !(estimateur %in% c("4", "4A", "4B")) |
@@ -171,7 +135,6 @@ boucles_simulations <- function(nb_sim,
       methode = factor(methode, levels = c("sans_nr", "cnr_exacte", "sans_grh", "avec_grh"))
     )
   
-  # Calcul des biais relatifs
   res_final_biais <- res_final_brut %>%
     dplyr::group_by(y, ensemble) %>%
     dplyr::mutate(biais_relatif = ifelse(
@@ -183,20 +146,15 @@ boucles_simulations <- function(nb_sim,
     dplyr::ungroup() %>%
     dplyr::filter(estimateur != "recensement")
   
-  # Taux de réponse par GRH et mode
   taux_rep_grh <- dplyr::bind_rows(taux_reps_grh_mode) %>%
     dplyr::group_by(scenario, grh, mode) %>%
     dplyr::summarise(taux_rep = mean(taux_rep), .groups = "drop")
   
-  # Calcul des moyennes des taux de réponse pour chaque scénario et strate (global, A, B)
   moyenne_taux_reponse <- lapply(scenarios, function(s) {
     scenario_key <- paste0("scenario_", s)
-    # Extraire les taux pour ce scénario et chaque strate
     taux_global <- sapply(tous_les_taux_reponse, function(x) x[[scenario_key]]$global)
     taux_A <- sapply(tous_les_taux_reponse, function(x) x[[scenario_key]]$A)
     taux_B <- sapply(tous_les_taux_reponse, function(x) x[[scenario_key]]$B)
-    
-    # Calculer la moyenne pour chaque strate
     data.frame(
       scenario = s,
       strate = c("global", "A", "B"),
@@ -204,15 +162,13 @@ boucles_simulations <- function(nb_sim,
                      mean(taux_A, na.rm = TRUE),
                      mean(taux_B, na.rm = TRUE))
     )
-  }) %>%
-    do.call(rbind, .)
+  }) %>% do.call(rbind, .)
   
-  # Retourne tous les résultats
   return(list(
     brut = res_final_brut,
     biais = res_final_biais,
     taux_rep_grh = taux_rep_grh,
-    tous_les_taux_reponse = tous_les_taux_reponse,  # Liste de tous les taux de réponse par simulation
-    moyenne_taux_reponse = moyenne_taux_reponse     # Moyenne des taux de réponse
+    tous_les_taux_reponse = tous_les_taux_reponse,
+    moyenne_taux_reponse = moyenne_taux_reponse
   ))
 }
