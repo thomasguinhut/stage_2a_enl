@@ -8,31 +8,6 @@ source("R/C-application/C.1-tirage_simple.R")
 source("R/C-application/C.2-cnr.R")
 source("R/C-application/C.3-estimations.R")
 source("R/C-application/C.4-resultats_un_echantillon.R")
-test <- resultats$brut
-str(bdd_avec_tirage_et_cnr_et_combi)
-
-sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_1) / sum(bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode)
-sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_2) / sum(bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode)
-sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_3) / sum(bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode)
-sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_4) / sum(bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode)
-
-sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_1[bdd_avec_tirage_et_cnr_et_combi$strate_vec == "A"]) /
-  sum(bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode[bdd_avec_tirage_et_cnr_et_combi$strate_vec == "A"])
-sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_2[bdd_avec_tirage_et_cnr_et_combi$strate_vec == "A"]) /
-  sum(bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode[bdd_avec_tirage_et_cnr_et_combi$strate_vec == "A"])
-sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_3[bdd_avec_tirage_et_cnr_et_combi$strate_vec == "A"]) /
-  sum(bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode[bdd_avec_tirage_et_cnr_et_combi$strate_vec == "A"])
-sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_4[bdd_avec_tirage_et_cnr_et_combi$strate_vec == "A"]) /
-  sum(bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode[bdd_avec_tirage_et_cnr_et_combi$strate_vec == "A"])
-
-sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_1[bdd_avec_tirage_et_cnr_et_combi$strate_vec == "B"]) /
-  sum(bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode[bdd_avec_tirage_et_cnr_et_combi$strate_vec == "B"])
-sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_2[bdd_avec_tirage_et_cnr_et_combi$strate_vec == "B"]) /
-  sum(bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode[bdd_avec_tirage_et_cnr_et_combi$strate_vec == "B"])
-sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_3[bdd_avec_tirage_et_cnr_et_combi$strate_vec == "B"]) /
-  sum(bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode[bdd_avec_tirage_et_cnr_et_combi$strate_vec == "B"])
-sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_4[bdd_avec_tirage_et_cnr_et_combi$strate_vec == "B"]) /
-  sum(bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode[bdd_avec_tirage_et_cnr_et_combi$strate_vec == "B"])
 
 
 # ------------------------- SIMULATIONS ----------------------------------------
@@ -59,8 +34,8 @@ resultats <- boucles_simulations(
 
 # ---------------------- IMPORTS / EXPORTS -------------------------------------
 
-nom_dossier <- "scenario_4"
-num_dossier <- "4"
+nom_dossier <- "scenario_1"
+num_dossier <- "1"
 
 # Créer le dossier s’il n’existe pas
 chemin_dossier <- paste0("stage_2a_enl/exports/", num_dossier, "-", nom_dossier)
@@ -102,10 +77,3 @@ for (sc in scenarios_nr) {
   unlink("R/D-exports", recursive = TRUE, force = TRUE)
   
 }
-
-# Pour voir tous les taux de réponse par simulation :
-print(resultats$tous_les_taux_reponse)
-
-# Pour voir la moyenne des taux de réponse :
-print(resultats$moyenne_taux_reponse)
-  

@@ -1,9 +1,8 @@
-# Fonction pour extraire les coefficients exacts
 extract_exact_coefficients <- function(data) {
   # Initialisation des résultats
   results <- list()
   
-  # Sélection des variables X, Y, Z (uniquement celles avec _total pour Y)
+  # Sélection des variables X, Y, Z (inclure x_4 et x_5)
   x_vars <- grep("^x_[0-9]+$", names(data), value = TRUE)
   y_vars <- grep("^y_[0-9]+_total$", names(data), value = TRUE)
   z_vars <- grep("^z_[0-9]+$", names(data), value = TRUE)
@@ -43,10 +42,12 @@ extract_exact_coefficients <- function(data) {
     names(coef_int) <- c(x_vars, y_vars, z_vars)
     names(coef_tel) <- c(x_vars, y_vars, z_vars)
     
-    # Forcer les paramètres delta à 0 pour le scénario 1
+    # Forcer les paramètres delta et gamma à 0 pour le scénario 1
     if (s == 1) {
-      coef_int[names(coef_int) %in% z_vars] <- 0
-      coef_tel[names(coef_tel) %in% z_vars] <- 0
+      coef_int[names(coef_int) %in% z_vars] <- 0  # Deltas à 0
+      coef_int[names(coef_int) %in% y_vars] <- 0  # Gammas à 0
+      coef_tel[names(coef_tel) %in% z_vars] <- 0  # Deltas à 0
+      coef_tel[names(coef_tel) %in% y_vars] <- 0  # Gammas à 0
     }
     
     # Stockage des résultats
@@ -71,13 +72,15 @@ for (s in 1:4) {
   print(coefs_exacts[[paste0("scenario_", s)]]$telephone)
 }
 
-# Création d'un tableau récapitulatif
+# Création d'un tableau récapitulatif avec Beta4 et Beta5
 tableau_coefficients <- data.frame(
   Scénario = integer(),
   Mode = character(),
   Beta1 = numeric(),
   Beta2 = numeric(),
   Beta3 = numeric(),
+  Beta4 = numeric(),
+  Beta5 = numeric(),
   Gamma1 = numeric(),
   Gamma2 = numeric(),
   Gamma3 = numeric(),
@@ -96,6 +99,8 @@ for (s in 1:4) {
                                   Beta1 = coef_int["x_1"],
                                   Beta2 = coef_int["x_2"],
                                   Beta3 = coef_int["x_3"],
+                                  Beta4 = coef_int["x_4"],
+                                  Beta5 = coef_int["x_5"],
                                   Gamma1 = coef_int["y_1_total"],
                                   Gamma2 = coef_int["y_2_total"],
                                   Gamma3 = coef_int["y_3_total"],
@@ -103,6 +108,7 @@ for (s in 1:4) {
                                   Delta2 = coef_int["z_2"],
                                   Delta3 = coef_int["z_3"]
                                 ))
+  
   # Téléphone
   coef_tel <- coefs_exacts[[paste0("scenario_", s)]]$telephone
   tableau_coefficients <- rbind(tableau_coefficients,
@@ -112,6 +118,8 @@ for (s in 1:4) {
                                   Beta1 = coef_tel["x_1"],
                                   Beta2 = coef_tel["x_2"],
                                   Beta3 = coef_tel["x_3"],
+                                  Beta4 = coef_tel["x_4"],
+                                  Beta5 = coef_tel["x_5"],
                                   Gamma1 = coef_tel["y_1_total"],
                                   Gamma2 = coef_tel["y_2_total"],
                                   Gamma3 = coef_tel["y_3_total"],
@@ -124,4 +132,4 @@ for (s in 1:4) {
 # Affichage du tableau récapitulatif
 print(tableau_coefficients)
 
-
+table(bdd)
