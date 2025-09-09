@@ -11,7 +11,7 @@ source("R/C-application/C.4-resultats_un_echantillon.R")
 test <- resultats$brut
 str(bdd_avec_tirage_et_cnr_et_combi)
 
-sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_1) / sum(bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode)
+sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_1) / (sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_1) + sum(bdd_avec_tirage_et_cnr_et_combi$rep_mono_1))
 sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_2) / sum(bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode)
 sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_3) / sum(bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode)
 sum(bdd_avec_tirage_et_cnr_et_combi$rep_multi_4) / sum(bdd_avec_tirage_et_cnr_et_combi$ind_tirage_monomode)
